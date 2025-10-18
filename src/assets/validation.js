@@ -88,7 +88,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return false;
         }
         
-        const zatiak = input.split("-");
+        const zatiak = value.split("-");
         const urtea = parseInt(zatiak[0], 10);
         const hilabetea = parseInt(zatiak[1], 10);
         const eguna = parseInt(zatiak[2], 10);
