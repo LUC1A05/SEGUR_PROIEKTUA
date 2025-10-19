@@ -1,67 +1,55 @@
 <?php
-//if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    //TODO
-//}
-// POST ez bada edo errorerik badaude, HTML-a erakuzten da
+// Variables de estado inicial
+$global_error = null;
+$form_data = []; // Para rellenar campos después de un error, si lo deseas
+
+// ------------------------------------------------------------------
+// I. LÓGICA DE PROCESAMIENTO (Controlador)
+// ------------------------------------------------------------------
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    
+    // Recoger los datos del formulario
+    $form_data = $_POST;
+    
+    // Aquí iría la validación backend (PHP) de todos los datos
+    // *************************************************************
+    // EJEMPLO de validación backend (AÑADIR MÁS VALIDACIONES AQUÍ):
+    // if (strlen($form_data['pasahitza']) < 6) {
+    //     $global_error = "Pasahitza sei karaktere baino gehiago izan behar du.";
+    // }
+    // *************************************************************
+    
+    // Si NO se detectan errores:
+    if ($global_error === null) {
+        
+        // 1. Conectar a MariaDB
+        // 2. Hash del password (OBLIGATORIO: password_hash())
+        // 3. Insertar el nuevo usuario en la BBDD
+        
+        // 4. Redirigir al usuario (ejemplo: al login)
+        // header("Location: /login");
+        // exit();
+        
+    }
+}
+
+// ------------------------------------------------------------------
+// II. CARGA DE LA VISTA (Si es GET o si hay errores en POST)
+// ------------------------------------------------------------------
+
+// Definir la ruta correcta de la plantilla (IMPORTANTE)
+// __DIR__ es el directorio actual (src/), subimos un nivel (a /) y entramos en /templates
+$template_path = __DIR__ . '/../templates/register_form.html';
+
+// El include hace que PHP lea y procese el archivo HTML.
+// Las variables PHP ($global_error, $form_data) están disponibles dentro del HTML.
+if (file_exists($template_path)) {
+    include $template_path;
+} else {
+    // Error si no se encuentra la plantilla
+    http_response_code(500); 
+    echo "Errorea: Ezin izan da plantilla aurkitu.";
+}
+
 ?>
-
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>register</title>
-    <link rel="stylesheet" href="assets/style.css">
-</head> 
-<body>
-    <h1>Erabiltzailearen erregistroa</h1>   
-
-    <form id="register_form" method="POST" action="/register">
-
-        <div>
-            <label for="izen_abizen">Izen Abizenak:</label>
-            <input type="text" id="izen_abizen" name="izen_abizen" required>
-            <span class="error" id="izen_abizen_errorea"></span>
-        </div>
-
-        <div>
-            <label for="nan">NAN:</label>
-            <input type="text" id="nan" name="nan" required>
-            <span class="error" id="nan_errorea"></span>
-        </div>
-
-        <div>
-            <label for="telefonoa">Telefonoa:</label>
-            <input type="tel" id="telefonoa" name="telefonoa" required>
-            <span class="error" id="telefonoa_errorea"></span>
-        </div>
-
-        <div>
-            <label for="jaiotze_data">Jaiotze Data (YYYY-MM-DD):</label>
-            <input type="text" id="jaiotze_data" name="jaiotze_data" required>
-            <span class="error" id="jaiotze_data_errorea"></span>
-        </div>
-
-        <div>
-            <label for="email">Emaila:</label>
-            <input type="email" id="email" name="email" required>
-            <span class="error" id="email_errorea"></span>
-        </div>
-
-        <div>
-            <label for="erabiltzaile_izena">Erabiltzaile Izena:</label>
-            <input type="text" id="erabiltzaile_izena" name="erabiltzaile_izena" required>
-            <span class="error" id="erabiltzaile_izena_errorea"></span>
-        </div>
-
-        <div>
-            <label for="pasahitza">Pasahitza:</label>
-            <input type="password" id="pasahitza" name="pasahitza" required>
-        </div>
-
-        <button type="submit" id="register_submit">Erregistratu</button>
-    </form>
-
-    <script src="assets/validation.js"></script>
-</body>
-</html>
