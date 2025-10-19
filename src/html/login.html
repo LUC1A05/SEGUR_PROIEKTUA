@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+    <h1>Saioa hasi</h1>
+
+    <?php if(isset($error)) echo "<p style='color:red;'>$error</p>"; ?>
+
+    <form id="login_form" method="POST" action="/login">
+        <div>
+            <label for="erabiltzaile_izena">Erabiltzaile Izena:</label>
+            <input type="text" id="erabiltzaile_izena" name="erabiltzaile_izena" required>
+        </div>
+
+        <div>
+            <label for="pasahitza">Pasahitza:</label>
+            <input type="password" id="pasahitza" name="pasahitza" required>
+        </div>
+
+        <button type="submit" id="login_submit">Saioa hasi</button>
+    </form>
+</body>
+</html>

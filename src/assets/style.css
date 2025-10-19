@@ -64,5 +64,5 @@ button {
 }
 
 button:hover {
-    background-color: #4cae4c;
+    background: linear-gradient(to left, #6a4cff, #28bbff) no-repeat;
 }
