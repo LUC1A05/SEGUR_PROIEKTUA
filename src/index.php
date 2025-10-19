@@ -1,6 +1,5 @@
 <?php
 header_remove('X-Powered-By');
-
 $lifetime = 0;
 $path = '/; samesite=Lax'; 
 $domain = '';
