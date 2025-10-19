@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('erregistro_formularioa');
+    const form = document.getElementById('register_form');
 
     form.addEventListener('submit', function(event) {
         let isValid = true;

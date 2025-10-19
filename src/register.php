@@ -16,50 +16,50 @@
 <body>
     <h1>Erabiltzailearen erregistroa</h1>   
 
-    <form id="erregistro_formularioa" method="POST" action="/register">
+    <form id="register_form" method="POST" action="/register">
 
         <div>
             <label for="izen_abizen">Izen Abizenak:</label>
-            <input type="text" id="izen_abizen" required>
+            <input type="text" id="izen_abizen" name="izen_abizen" required>
             <span class="error" id="izen_abizen_errorea"></span>
         </div>
 
         <div>
             <label for="nan">NAN:</label>
-            <input type="text" id="nan" required>
+            <input type="text" id="nan" name="nan" required>
             <span class="error" id="nan_errorea"></span>
         </div>
 
         <div>
             <label for="telefonoa">Telefonoa:</label>
-            <input type="tel" id="telefonoa" required>
+            <input type="tel" id="telefonoa" name="telefonoa" required>
             <span class="error" id="telefonoa_errorea"></span>
         </div>
 
         <div>
             <label for="jaiotze_data">Jaiotze Data (YYYY-MM-DD):</label>
-            <input type="text" id="jaiotze_data" required>
+            <input type="text" id="jaiotze_data" name="jaiotze_data" required>
             <span class="error" id="jaiotze_data_errorea"></span>
         </div>
 
         <div>
             <label for="email">Emaila:</label>
-            <input type="email" id="email" required>
+            <input type="email" id="email" name="email" required>
             <span class="error" id="email_errorea"></span>
         </div>
 
         <div>
             <label for="erabiltzaile_izena">Erabiltzaile Izena:</label>
-            <input type="text" id="erabiltzaile_izena" required>
+            <input type="text" id="erabiltzaile_izena" name="erabiltzaile_izena" required>
             <span class="error" id="erabiltzaile_izena_errorea"></span>
         </div>
 
         <div>
             <label for="pasahitza">Pasahitza:</label>
-            <input type="password" id="pasahitza" required>
+            <input type="password" id="pasahitza" name="pasahitza" required>
         </div>
 
-        <button type="submit" id="erregistro_botoia">Erregistratu</button>
+        <button type="submit" id="register_submit">Erregistratu</button>
     </form>
 
     <script src="assets/validation.js"></script>
