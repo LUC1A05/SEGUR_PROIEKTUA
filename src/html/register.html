@@ -12,49 +12,51 @@
         <h1>Erabiltzailearen erregistroa</h1>   
 
         <div>
-            <label for="izen_abizen">Izen Abizenak:</label>
-            <input type="text" id="izen_abizen" name="izen_abizen" required>
+            <label for="izen_abizen">Izen Abizenak</label>
+            <input type="text" id="izen_abizen" name="izen_abizen" required placeholder="Juan Perez">
             <span class="error" id="izen_abizen_errorea"></span>
         </div>
 
         <div>
-            <label for="nan">NAN:</label>
-            <input type="text" id="nan" name="nan" required>
+            <label for="nan">NAN</label>
+            <input type="text" id="nan" name="nan" required placeholder="11111111-Z">
             <span class="error" id="nan_errorea"></span>
         </div>
 
         <div>
-            <label for="telefonoa">Telefonoa:</label>
-            <input type="tel" id="telefonoa" name="telefonoa" required>
+            <label for="telefonoa">Telefonoa</label>
+            <input type="tel" id="telefonoa" name="telefonoa" required placeholder="999999999">
             <span class="error" id="telefonoa_errorea"></span>
         </div>
 
         <div>
-            <label for="jaiotze_data">Jaiotze Data (YYYY-MM-DD):</label>
-            <input type="text" id="jaiotze_data" name="jaiotze_data" required>
+            <label for="jaiotze_data">Jaiotze Data</label>
+            <input type="text" id="jaiotze_data" name="jaiotze_data" required placeholder="YYYY-MM-DD">
             <span class="error" id="jaiotze_data_errorea"></span>
         </div>
 
         <div>
-            <label for="email">Emaila:</label>
-            <input type="email" id="email" name="email" required>
+            <label for="email">Emaila</label>
+            <input type="email" id="email" name="email" required placeholder="email@adibidea.com">
             <span class="error" id="email_errorea"></span>
         </div>
 
         <div>
-            <label for="erabiltzaile_izena">Erabiltzaile Izena:</label>
-            <input type="text" id="erabiltzaile_izena" name="erabiltzaile_izena" required>
+            <label for="erabiltzaile_izena">Erabiltzaile Izena</label>
+            <input type="text" id="erabiltzaile_izena" name="erabiltzaile_izena" required placeholder="username123">
             <span class="error" id="erabiltzaile_izena_errorea"></span>
         </div>
 
         <div>
-            <label for="pasahitza">Pasahitza:</label>
-            <input type="password" id="pasahitza" name="pasahitza" required>
+            <label for="pasahitza">Pasahitza</label>
+            <input type="password" id="pasahitza" name="pasahitza" required placeholder="******">
         </div>
 
         <button type="submit" id="register_submit">Erregistratu</button>
     </form>
+    <p id="login_link">Baduzu jada kontu bat? <a href="login.html">Saioa hasi hemen</a></p>
 
-    <script src="assets/validation.js"></script>
+    <script src="../assets/validation.js"></script>
+    
 </body>
 </html>
