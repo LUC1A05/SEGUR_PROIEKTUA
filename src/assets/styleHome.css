@@ -1,0 +1,130 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: 'Montserrat';
+    background: linear-gradient(#e2ffe79e, #e2ffe7) no-repeat center center fixed, url('../../images/background.webp') no-repeat center center fixed;
+    color: #101632dd;
+}
+
+div, ul, nav, header, footer, a, li, label {
+    padding: 0;
+    margin: 0;
+}
+
+
+/*------------HEADER--------------*/
+.header {
+    background-color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 0 20px #00000070;
+    animation: header-movement linear both;
+    animation-timeline: scroll();
+    animation-range: 0 100px;
+    position: sticky;
+    top: 0;
+}
+
+.header_open-nav-button {
+    color: #52e26a;
+    font-size: 3rem;
+    font-weight: 600;
+    position: absolute;
+    right: 10px;
+}
+
+.header .header_checkbox {
+    display: none;
+}
+
+.header_nav {
+    display: none;
+    background-color: #ffffffa1;
+    position: absolute;
+    height: 100vh;
+    width: 200px;
+    top: 0;
+    right: 0;
+    z-index: -1;
+    box-shadow: 0 0 20px #00000070;
+}
+
+.header_nav-list {
+    display: flex;
+    flex-direction: column;
+    height: 40vh;
+    margin: auto;
+    justify-content: space-evenly;
+}
+
+.header_checkbox:checked ~ .header_nav {
+    display: flex;
+}
+
+.header_logo {
+    max-width: 100%;
+    width: 64px;
+    margin: 10px 20px;
+}
+
+.header_nav-item {
+    list-style: none;
+}
+
+.header_nav-item a {
+    color: #52e26a;
+    text-decoration: none;
+}
+
+.header_nav-item a:is(:hover, :active) {
+    text-decoration: underline;
+}
+
+/*-----------HEADER QUERIES-----------*/
+
+@media screen and (min-width: 600px) {
+
+    .header_nav {
+        display: flex;
+        position: static;
+        height: auto;
+        width: auto;
+        justify-content: space-between;
+        box-shadow: none;
+        background-color: initial;
+    }
+
+    .header_nav-list {
+        flex-direction: row;
+        height: auto;
+        width: auto;
+        gap: 20px;
+        margin-right: 40px;
+    }
+
+    .header_open-nav-button {
+        display: none;
+    }
+}
+
+/*-----------HEADER END---------------*/
+
+
+/*-------------PROFILE---------------*/
+
+/*-------------ANIMATIONS---------------*/
+
+@keyframes header-movement {
+    from {
+        padding: 10px 0;
+        background-color: #fff;
+    }
+    to {
+        padding: 10px 0;
+        background-color: #fff;
+    }
+}
