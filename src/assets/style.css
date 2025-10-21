@@ -2,16 +2,20 @@ html, body {
     height: 100%;
     margin: 0;
 }
+
 body {
     font-family: sans-serif;
     padding: 20px;
     background: linear-gradient(rgba(144, 122, 255, 0.5), rgba(117, 211, 255, 0.5)) no-repeat center center fixed,url('../../images/background.webp') no-repeat center center fixed;
     background-size: cover;
+    margin: 0;
+    overflow-y: hidden;
 }
 
 h1 {
     color: #333;
     text-align: center;
+    margin-top: 0;
 }
 
 form {
@@ -24,13 +28,14 @@ form {
 }
 
 form div {
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
 label {
     display: block;
     margin-bottom: 5px;
     font-weight: bold;
+    font-size: 15px;
 }
 
 input[type="text"],
