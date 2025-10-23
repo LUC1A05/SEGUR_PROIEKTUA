@@ -39,3 +39,9 @@ INSERT INTO `maskotak` (maskotaren_izena, espeziea, arraza, adina, sexua, deskri
 ('Wanda', 'Hamsterra', 'Siberiakoa', 1, 'Emea', ''),
 ('Ilargi', 'Txakurra', 'Euskal Artzaina', 4, 'Arra', ''),
 ('Dune', 'Katua', 'Siamesa', 2, 'Emea', '');
+
+INSERT INTO erabiltzaileak (izena, abizenak, nan, telefonoa, jaiotze_data, email, pasahitza) VALUES 
+  ('Ainhoa','Tomas Santin','89345621-R','688907623','2005-02-09','ainhoa.th@gmail.com', MD5('T2or4t9')),
+  ('Lucia','Del Rio Nizaso','45237843-J','688349067','2005-04-27','lucia.th@gmail.com', MD5('R9od2g9')),
+  ('Asier','Las Hayas Fernandez','34781267-M','644568912','2005-03-12','asier.th@gmail.com', MD5('T5y39rw')),
+  ('Mikel','Eguia Bengoa','45761234-F','633457612','2005-10-27','meguiaissks@gmail.com', MD5('K3o90tf'));
