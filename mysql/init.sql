@@ -56,3 +56,9 @@ ikusten'),
   ('Jupiter', 'Zaldia', 'Purasangre', 29, 'Emea', 'Artritisa dauka'),
 ('Oreo', 'Txerria', 'Duroc', 7, 'Arra', ''), 
   ('Nagini', 'Sugea', 'Boa Constrictor', 20, 'Emea', '');
+
+INSERT INTO maskotak (maskotaren_izena, espeziea, arraza, adina, sexua, deskribapena) VALUES 
+  ('Theodore', 'Urtxintxa', 'Sciurus', 2, 'Arra', ''), 
+  ('Gustavo', 'Igela', 'Dardo-igela', 1, 'Emea', ''), 
+  ('Miquelangelo', 'Dortoka', 'Seychelles Dortoka Handia', 120, 'Arra', ''), 
+  ('Loki', 'Untxia', 'Flandeseko Untxi Handia', 4, 'Emea','');
