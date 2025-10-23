@@ -45,3 +45,14 @@ INSERT INTO erabiltzaileak (izena, abizenak, nan, telefonoa, jaiotze_data, email
   ('Lucia','Del Rio Nizaso','45237843-J','688349067','2005-04-27','lucia.th@gmail.com', MD5('R9od2g9')),
   ('Asier','Las Hayas Fernandez','34781267-M','644568912','2005-03-12','asier.th@gmail.com', MD5('T5y39rw')),
   ('Mikel','Eguia Bengoa','45761234-F','633457612','2005-10-27','meguiaissks@gmail.com', MD5('K3o90tf'));
+
+INSERT INTO maskotak (maskotaren_izena, espeziea, arraza, adina, sexua, deskribapena) VALUES 
+  ('Thor', 'Txakurra', 'Boxer', 10,'Arra', 'Bihotz arazoak'), 
+  ('Pato', 'Loroa', 'Guacamayo', 35, 'Emea', ''), 
+  ('Patxi', 'Hamsterra','Siriakoa', 1, 'Arra', ''), 
+  ('Pascal', 'Kamalehoia', 'Kamalehoi berdea', 4, 'Emea', 'Begi batetik ez du
+ikusten'), 
+  ('Remi', 'Arratoia', 'Arratoi beltza', 2, 'Arra', ''), 
+  ('Jupiter', 'Zaldia', 'Purasangre', 29, 'Emea', 'Artritisa dauka'),
+('Oreo', 'Txerria', 'Duroc', 7, 'Arra', ''), 
+  ('Nagini', 'Sugea', 'Boa Constrictor', 20, 'Emea', '');
