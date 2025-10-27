@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error_message = "Maskota (izena, espeziea, sexua) eremuak bete behar dira.";
     } else {
         try {
-            $sql = "INSERT INTO maskotak (maskotaren_izena, espeziea, arraza, adina, sexua, deskribapena, jabe_id) 
+            $sql = "INSERT INTO maskotak (maskotaren_izena, espeziea, arraza, adina, sexua, deskribapena, jabea_id) 
                     VALUES (?, ?, ?, ?, ?, ?, ?)";
             
             $stmt = $pdo->prepare($sql);
