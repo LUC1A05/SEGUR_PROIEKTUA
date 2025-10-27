@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $pdo = new PDO($dsn, $user, $pass, $options);
             
             // 1. Erabiltzailea bilatu
-            $sql = "SELECT id, erabiltzaile_izena, pasahitza, izen_abizen FROM usuarios WHERE erabiltzaile_izena = ?";
+            $sql = "SELECT id, erabiltzaile_izena, pasahitza, izen_abizen FROM erabiltzaileak WHERE erabiltzaile_izena = ?";
             $stmt = $pdo->prepare($sql);
             $stmt->execute([$erabiltzaileIzena]);
             $user = $stmt->fetch();
