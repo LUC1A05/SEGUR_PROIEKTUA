@@ -12,9 +12,18 @@
 1. Proiektua klonatu
    git clone git@github.com:LUC1A05/SEGUR_PROIEKTUA.git
    cd SEGUR_PROIEKTUA
-2. Docker irudia sortu
-   docker build -t SEGUR_PROIEKTUA:latest .
-3. Kontainerraren exekuzioa
-   docker run -d -p 3000:3000 --name segur_proiektua_container SEGUR_PROIEKTUA:latest
-4. Kontainerrak martxan daudela egiaztatu
+   git checkout entrega_1
+3. Docker irudia sortu
+   docker image rm web:latest
+   docker build -t="web" .
+5. Kontainerraren exekuzioa
+   docker-compose up -d
+6. Kontainerrak martxan daudela egiaztatu
    docker ps
+7. Datu basea inportatu:
+  1. localhost:8890 atzitu
+  2. Sesioa hasi:
+     user: admin
+     pass:test
+  3. databese atzitu
+  4. database.sql fitxategia inportatu
