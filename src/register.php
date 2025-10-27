@@ -6,8 +6,8 @@ session_start();
 
 $host = 'db';
 $db   = 'database';
-$user = 'root';
-$pass = 'password';
+$user = 'admin';
+$pass = 'test';
 $charset = 'utf8mb4';
 
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
     
-    $hashedPassword = password_hash($pasahitza, PASSWORD_DEFAULT);
+    $hashedPassword = md5($pasahitza);
     
     try {
         $pdo = new PDO($dsn, $user, $pass, $options);
@@ -63,15 +63,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header('Location: index.php');
         exit;
     } catch (PDOException $e) {
-        if ($e->getCode() === '23000') {
-            $_SESSION['error_message'] = "Errorea: NAN, email edo erabiltzaile izena dagoeneko erregistratuta dago.";
-        } else {
-            $_SESSION['error_message'] = "Errorea datu-basean: " . $e->getMessage();
-        }
-        header('Location: /index.php');
-        exit;
+    if ($e->getCode() === '23000') {
+        $error_message = "Errorea: NAN, email edo erabiltzaile izena dagoeneko erregistratuta dago.";
+    } else {
+        $error_message = "Errorea datu-basean: " . $e->getMessage();
     }
 }
+
 ?>
 
 <!DOCTYPE html>
