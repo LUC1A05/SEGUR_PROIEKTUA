@@ -59,8 +59,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         unset($_SESSION['error_message']);
         unset($_SESSION['form_data']); 
-    
-        header('Location: home.php');
+
+        header('Location: index.php');
         exit;
     } catch (PDOException $e) {
         if ($e->getCode() === '23000') {
@@ -87,7 +87,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <form id="register_form" method="POST" action="/src/register.php">
         <h1>Erabiltzailearen erregistroa</h1>   
 
-        <!-- Campos -->
         <div><label for="izen_abizen">Izen Abizenak</label>
             <input type="text" id="izen_abizen" name="izen_abizen" required placeholder="Juan Perez">
         </div>

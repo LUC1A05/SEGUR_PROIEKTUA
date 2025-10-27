@@ -1,31 +1,56 @@
-<<<<<<< HEAD
 <?php
 session_start();
+
 ?>
+
+
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Albaitaria - Home</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="assets/styleHome.css">
 </head>
 <body>
-    <h1>Ongi etorri albaitariarenera!</h1>
+    <header class="header">
+        <input type="checkbox" class="header_checkbox" id="open-menu">
+        <label for="open-menu" class="header_open-nav-button" role="button">=</label>
+        <div class="header_logo-container">
+            <img src="../images/button.png" alt="Logo" class="header_logo">
+        </div>
+        <nav class="header_nav">
+            <ul class="header_nav-list">
+                <li class="header_nav-item"><a href="/"> Hasiera</a></li>
 
-    <?php if(isset($_SESSION['erabiltzailea'])): ?>
-        <p>Kaixo, <?= htmlspecialchars($_SESSION['erabiltzailea']) ?>!</p>
-        <ul>
-            <li><a href="show_user.php?user=<?= $_SESSION['id'] ?>">Nire perfila kontsultatu</a></li>
-            <li><a href="modify_user.php?user=<?= $_SESSION['id'] ?>">Nire datuak aldatu</a></li>
-            <li><a href="items.php">Ikusi maskotak</a></li>
-            <li><a href="add_item.php">Gehitu maskota</a></li>
-            <li><a href="logout.php">Saioa itxi</a></li>
-        </ul>
-    <?php else: ?>
-        <ul>
-            <li><a href="register.php">Erregistroa</a></li>
-            <li><a href="login.php">Saioa hasi</a></li>
-            <li><a href="items.php">Ikusi maskotak</a></li>
-        </ul>
-    <?php endif; ?>
+                <?php if ($is_logged_in): ?>
+                    <li class="header_nav-item"><a href="items.php"> Nire animaliak</a></li>
+                    <li class="header_nav-item"><a href="add_item.php"> Animali bat adoptatu</a></li>
+                    <li class="header_nav-item"><a href="modify_user"> Nire Datuak aldatu</a></li>
+                <?php else: ?>
+                    <li class="header_nav-item"><a href="login.php"> Saioa hasi</a></li>
+                    <li class="header_nav-item"><a href="register.php"> Erregistratu</a></li>
+                <?php endif; ?>
+
+            </ul>
+        </nav>
+    </header>
+    <main class="profile">
+        <div class="profile_wrapper">
+            <div class="image_container">
+                <!--emen nahi duguna jarri-->
+                <h1>Ongi Etorri Web Sistemara</h1>
+                <?php if ($is_logged_in): ?>
+                    <p>
+                        Kaixo, **<?php echo htmlspecialchars($username); ?>**! Hasi elementuak kudeatzen goiko menua erabiliz.
+                    </p>
+                <?php else: ?>
+                    <p>
+                        Web Sistema hau erabiltzen hasteko, **Saioa hasi** edo **Erregistratu** mesedez.
+                    </p>
+                <?php endif; ?>
+            </div>
+        </div>
+    </main>
 </body>
 </html>
