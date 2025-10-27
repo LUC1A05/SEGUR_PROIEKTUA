@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $pasahitza = $_POST['pasahitza'] ?? '';
     
     if (empty($izenAbizen) || empty($nan) || empty($email) || empty($pasahitza)) {
-        $_SESSION['error_message'] = "Todos los campos obligatorios deben ser completados.";
+        $_SESSION['error_message'] = "Eremu gutziak bete behar dira.";
         header('Location: /register.php');
         exit;
     }
