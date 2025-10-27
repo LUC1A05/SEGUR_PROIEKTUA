@@ -4,14 +4,14 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 session_start();
 
-// Redirigir si no está logueado
+// logeatuta ez badago, login-era bideratu
 if (!isset($_SESSION['user_id'])) {
     $_SESSION['error_message'] = "Saioa hasi behar duzu zure maskotak ikusteko.";
     header('Location: /login.php');
     exit;
 }
 
-// --- CONFIGURACIÓN DE BASE DE DATOS (PDO) ---
+// --- datu basearen konfigurazioa (PDO) ---
 $host = 'db';
 $db   = 'database';
 $user = 'admin'; 
@@ -31,10 +31,10 @@ $user_id = $_SESSION['user_id'];
 try {
     $pdo = new PDO($dsn, $user, $pass, $options);
     
-    // 1. Obtener la Lista de Mascotas del Usuario
+    // 1. Maskoten lista atzitu
     $sql_list = "SELECT id, maskotaren_izena, espeziea, arraza, adina, sexua, deskribapena 
                  FROM maskotak 
-                 WHERE propietario_id = ?"; // ASUMIMOS propietario_id
+                 WHERE jabea_id = ?";
     
     $stmt_list = $pdo->prepare($sql_list);
     $stmt_list->execute([$user_id]);
@@ -53,7 +53,7 @@ try {
     <title>Nire Maskotak</title>
     <link rel="stylesheet" href="assets/styleHas.css">
     <style>
-        /* Estilos básicos para la lista */
+        /* Estiloak */
         .maskota-txartela { 
             border: 1px solid #ccc; 
             padding: 15px; 

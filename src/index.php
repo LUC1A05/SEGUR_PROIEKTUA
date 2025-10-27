@@ -23,16 +23,13 @@ $username = $is_logged_in ? $_SESSION['user_name'] : '';
         </div>
         <nav class="header_nav">
             <ul class="header_nav-list">
-                <li class="header_nav-item"><a href="register.php"> Hasiera</a></li>
+                <li class="header_nav-item"><a href="index.php"> Hasiera</a></li>
 
                 <?php if ($is_logged_in): ?>
                     <li class="header_nav-item"><a href="items.php"> Nire animaliak</a></li>
                     <li class="header_nav-item"><a href="add_item.php"> Animali bat adoptatu</a></li>
-                    <li class="header_nav-item"><a href="modify_user"> Nire Datuak aldatu</a></li>
+                    <li class="header_nav-item"><a href="modify_user.php"> Nire Datuak aldatu</a></li>
                 <?php else: ?>
-                    <li class="header_nav-item"><a href="items.php"> Nire animaliak</a></li>
-                    <li class="header_nav-item"><a href="add_item.php"> Animali bat adoptatu</a></li>
-                    <li class="header_nav-item"><a href="modify_user"> Nire Datuak aldatu</a></li>
                     <li class="header_nav-item"><a href="login.php"> Saioa hasi</a></li>
                     <li class="header_nav-item"><a href="register.php"> Erregistratu</a></li>
                 <?php endif; ?>
@@ -44,14 +41,14 @@ $username = $is_logged_in ? $_SESSION['user_name'] : '';
         <div class="profile_wrapper">
             <div class="image_container">
                 <!--emen nahi duguna jarri-->
-                <h1>Ongi Etorri Web Sistemara</h1>
+                <h1 id="welcome">Ongi Etorri Web Sistemara</h1>
                 <?php if ($is_logged_in): ?>
                     <p>
-                        Kaixo, **<?php echo htmlspecialchars($username); ?>**! Hasi zure animaliak kudeatzen goiko menua erabiliz.
+                        Kaixo, <b><?php echo htmlspecialchars($username); ?></b>! Hasi zure animaliak kudeatzen goiko menua erabiliz.
                     </p>
                 <?php else: ?>
                     <p>
-                        Web Sistema hau erabiltzen hasteko, **Saioa hasi** edo **Erregistratu** mesedez.
+                        Web Sistema hau erabiltzen hasteko, <b>Saioa hasi</b> edo <b>Erregistratu</b> mesedez.
                     </p>
                 <?php endif; ?>
             </div>

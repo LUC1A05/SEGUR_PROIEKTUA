@@ -4,14 +4,14 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 session_start();
 
-// 1. Verificar Sesión
+// 1. Sesioa egiaztatu
 if (!isset($_SESSION['user_id'])) {
     $_SESSION['error_message'] = "Saioa hasi behar duzu zure maskotak aldatzeko.";
     header('Location: /login.php');
     exit;
 }
 
-// --- CONFIGURACIÓN DE BASE DE DATOS (PDO) ---
+// --- datu basearen konfigurazioa (PDO) ---
 $host = 'db';
 $db   = 'database';
 $user = 'admin'; 
@@ -37,27 +37,27 @@ try {
 }
 
 // ---------------------------------------------
-// 2. Obtener el ID de la mascota y Cargar Datos
+// 2. Kargatu Maskotaren Datuak
 // ---------------------------------------------
 $item_id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
-// Si se ha enviado el formulario, el ID viene por POST
+// POST bidezko eskaera bada, id-a lortu
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $item_id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
 }
 
-// Verificar ID válido
+// 1. id baliozko bat jaso dela berifikatu
 if (!$item_id) {
     $_SESSION['error_message'] = "Ez da maskota ID baliozko bat jaso.";
     header('Location: /items.php');
     exit;
 }
 
-// Cargar datos actuales de la mascota y verificar propiedad
+// Maskotaren datuak kargatu eta jabea egiaztatu
 try {
     $sql_fetch = "SELECT maskotaren_izena, espeziea, arraza, adina, sexua, deskribapena 
                   FROM maskotak 
-                  WHERE id = ? AND propietario_id = ?";
+                  WHERE id = ? AND jabea_id = ?";
     $stmt_fetch = $pdo->prepare($sql_fetch);
     $stmt_fetch->execute([$item_id, $user_id]);
     $maskota_datuak = $stmt_fetch->fetch();
@@ -74,7 +74,7 @@ try {
 
 
 // ---------------------------------------------
-// 3. Procesar la Modificación (POST)
+// 3. Prozesatu Aldaketa (POST)
 // ---------------------------------------------
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
@@ -111,7 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ]);
             
             $success_message = "Maskota arrakastaz aldatu da!";
-            // Actualizar los datos del formulario después de la modificación exitosa
+            // Berriro kargatu datuak eguneratuta
             $maskota_datuak = [
                 'maskotaren_izena' => $izena,
                 'espeziea' => $espeziea,

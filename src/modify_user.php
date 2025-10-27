@@ -4,14 +4,14 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 session_start();
 
-// 1. Verificar Sesión
+// 1. Sesioa egiaztatu
 if (!isset($_SESSION['user_id'])) {
     $_SESSION['error_message'] = "Saioa hasi behar duzu zure profila aldatzeko.";
     header('Location: /login.php');
     exit;
 }
 
-// --- CONFIGURACIÓN DE BASE DE DATOS (PDO) ---
+// --- datu basearen konfigurazioa (PDO) ---
 $host = 'db';
 $db   = 'database';
 $user = 'admin'; 
@@ -37,18 +37,17 @@ try {
 }
 
 // ---------------------------------------------
-// 2. Carga Inicial de Datos del Usuario
+// 2. Kargatu Erabiltzailearen Datuak
 // ---------------------------------------------
 try {
     $sql_fetch = "SELECT izen_abizen, nan, telefonoa, jaiotze_data, email, erabiltzaile_izena 
-                  FROM usuarios 
+                  FROM erabiltzaileak
                   WHERE id = ?";
     $stmt_fetch = $pdo->prepare($sql_fetch);
     $stmt_fetch->execute([$user_id]);
     $user_data = $stmt_fetch->fetch();
 
     if (!$user_data) {
-        // Esto no debería pasar si el usuario está logueado, pero es una protección
         session_destroy();
         header('Location: /login.php');
         exit;
@@ -59,7 +58,7 @@ try {
 }
 
 // ---------------------------------------------
-// 3. Procesar la Modificación (POST)
+// 3. Prozesatu Aldaketa (POST)
 // ---------------------------------------------
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
@@ -72,17 +71,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $pasahitza_berria = $_POST['pasahitza_berria'] ?? '';
     $pasahitza_konfirm = $_POST['pasahitza_konfirm'] ?? '';
 
-    // Validaciones básicas
     if (empty($izen_abizen) || empty($nan) || empty($email) || empty($erabiltzaile_izena)) {
         $error_message = "Izen-abizenak, NANa, E-maila eta Erabiltzaile izena derrigorrezkoak dira.";
     } elseif ($pasahitza_berria != $pasahitza_konfirm) {
         $error_message = "Pasahitz berriak ez datoz bat.";
     } else {
-        // Iniciar la construcción de la consulta y los parámetros
         $set_parts = [];
         $params = [];
-        
-        // --- 3.1. Validar unicidad (Email y Username) ---
+
+        // --- 3.1. Balidatu (Email eta Username) ---
         $sql_check = "SELECT id FROM usuarios WHERE (email = ? OR erabiltzaile_izena = ?) AND id != ?";
         $stmt_check = $pdo->prepare($sql_check);
         $stmt_check->execute([$email, $erabiltzaile_izena, $user_id]);
@@ -90,7 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($stmt_check->fetch()) {
             $error_message = "E-mail edo erabiltzaile izen hori dagoeneko erabilita dago.";
         } else {
-            // --- 3.2. Construir la consulta de UPDATE ---
+            // --- 3.2. UPDATE kontsulta ---
             $set_parts[] = "izen_abizen = ?"; $params[] = $izen_abizen;
             $set_parts[] = "nan = ?"; $params[] = $nan;
             $set_parts[] = "telefonoa = ?"; $params[] = $telefonoa;
@@ -98,13 +95,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $set_parts[] = "email = ?"; $params[] = $email;
             $set_parts[] = "erabiltzaile_izena = ?"; $params[] = $erabiltzaile_izena;
 
-            // Procesar la contraseña si se proporciona
+            // Pasahitza prozesatu, ematen bada
             if (!empty($pasahitza_berria)) {
                 $hashed_password = password_hash($pasahitza_berria, PASSWORD_DEFAULT);
                 $set_parts[] = "pasahitza = ?"; $params[] = $hashed_password;
             }
 
-            // --- 3.3. Ejecutar UPDATE ---
+            // --- 3.3. Update-a exekutatu ---
             $sql_update = "UPDATE usuarios SET " . implode(', ', $set_parts) . " WHERE id = ?";
             $params[] = $user_id; // Añadir el ID al final
 
@@ -114,11 +111,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 
                 $success_message = "Profila arrakastaz eguneratu da!";
                 
-                // Actualizar la sesión con el nuevo nombre/username si cambiaron
                 $_SESSION['username'] = $erabiltzaile_izena;
                 $_SESSION['user_name'] = $izen_abizen;
                 
-                // Recargar datos para prellenar el formulario correctamente
+                
                 $user_data = [
                     'izen_abizen' => $izen_abizen, 'nan' => $nan, 'telefonoa' => $telefonoa, 
                     'jaiotze_data' => $jaiotze_data, 'email' => $email, 
@@ -143,18 +139,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head> 
 <body>
 
-    <h1>Nire Profila Aldatu</h1>
     <p><a href="/">Hasierara Itzuli</a> | <a href="/items.php">Nire Maskotak</a></p>
-
+    
     <?php if (!empty($error_message)): ?>
         <p style="color: red; border: 1px solid red; padding: 10px;"><?php echo htmlspecialchars($error_message); ?></p>
-    <?php endif; ?>
-
-    <?php if (!empty($success_message)): ?>
-        <p style="color: green; border: 1px solid green; padding: 10px;"><?php echo htmlspecialchars($success_message); ?></p>
-    <?php endif; ?>
-
-    <form id="modify_user_form" method="POST" action="/modify_user.php"> 
+        <?php endif; ?>
+        
+        <?php if (!empty($success_message)): ?>
+            <p style="color: green; border: 1px solid green; padding: 10px;"><?php echo htmlspecialchars($success_message); ?></p>
+            <?php endif; ?>
+            
+        <form id="modify_user_form" method="POST" action="/modify_user.php"> 
+        <h1>Nire Profila Aldatu</h1>
         <div>
             <label for="izen_abizen">Izen-Abizenak:</label>
             <input type="text" id="izen_abizen" name="izen_abizen" required 
