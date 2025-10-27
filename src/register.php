@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error_message = "Errorea datu-basean: " . $e->getMessage();
     }
 }
-
+}
 ?>
 
 <!DOCTYPE html>
