@@ -10,17 +10,25 @@
 
 ## Nola hedatu:
 1. Proiektua klonatu
-   git clone git@github.com:LUC1A05/SEGUR_PROIEKTUA.git
-   cd SEGUR_PROIEKTUA
-   git checkout entrega_1
+   ```bash
+   $ git clone git@github.com:LUC1A05/SEGUR_PROIEKTUA.git
+   $ cd SEGUR_PROIEKTUA
+   $ git checkout entrega_1
+   ```
 3. Docker irudia sortu
+   ```bash
    docker image rm web:latest
    docker build -t="web" .
+   ```
 5. Kontainerraren exekuzioa
+   ```bash
    docker-compose up -d
-6. Kontainerrak martxan daudela egiaztatu
+   ```
+7. Kontainerrak martxan daudela egiaztatu
+   ```bash
    docker ps
-7. Datu basea inportatu:
+   ```
+9. Datu basea inportatu:
   1. localhost:8890 atzitu
   2. Sesioa hasi:
      user: admin
