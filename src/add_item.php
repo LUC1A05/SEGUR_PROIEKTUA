@@ -30,14 +30,10 @@ $user_id = $_SESSION['user_id'];
 
 try {
     $pdo = new PDO($dsn, $user, $pass, $options);
-catch (PDOException $e) {
+}catch (PDOException $e) {
     $error_message = "Errorea maskota erregistratzean: " . $e->getMessage();
 }
 
-
-// ---------------------------------------------
-// Procesar Añadir Nueva Mascota (POST)
-// ---------------------------------------------
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     $izena = htmlspecialchars(trim($_POST['maskotaren_izena'] ?? ''));
@@ -66,7 +62,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ]);
             
             $success_message = "Maskota berria arrakastaz erregistratu da!";
-            // Redirigir a la lista de items después del éxito
             header('Location: /items.php');
             exit;
 
