@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $deskribapena = htmlspecialchars(trim($_POST['deskribapena'] ?? ''));
 
     if (empty($izena) || empty($espeziea) || empty($sexua)) {
-        $error_message = "Mascota (izena, espeziea, sexua) eremuak bete behar dira.";
+        $error_message = "Maskota (izena, espeziea, sexua) eremuak bete behar dira.";
     } else {
         try {
             $sql = "INSERT INTO maskotak (maskotaren_izena, espeziea, arraza, adina, sexua, deskribapena, jabe_id) 
@@ -95,7 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <form id="add_item_form" method="POST" action="/add_item.php"> 
         <div>
-            <label for="maskotaren_izena">Mascota Izena:</label>
+            <label for="maskotaren_izena">Maskota Izena:</label>
             <input type="text" id="maskotaren_izena" name="maskotaren_izena" required>
         </div>
         <div>
