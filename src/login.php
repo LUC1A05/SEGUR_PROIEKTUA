@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute([$erabiltzaileIzena]);
             $user = $stmt->fetch();
             
-            if ($user && password_verify($pasahitza, $user['pasahitza'])) {
+            if ($user && md5($pasahitza) === $user['pasahitza'])) {
                 // 2. Autentifikazioa arrakastatsua
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['username'] = $user['erabiltzaile_izena'];
