@@ -30,9 +30,10 @@ $user_id = $_SESSION['user_id'];
 
 try {
     $pdo = new PDO($dsn, $user, $pass, $options);
-} catch (PDOException $e) {
-    die("Errorea datu-basean.");
+catch (PDOException $e) {
+    $error_message = "Errorea maskota erregistratzean: " . $e->getMessage();
 }
+
 
 // ---------------------------------------------
 // Procesar Añadir Nueva Mascota (POST)
