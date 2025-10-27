@@ -29,31 +29,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $erabiltzaileIzena = htmlspecialchars(trim($_POST['erabiltzaile_izena'] ?? ''));
     $pasahitza = $_POST['pasahitza'] ?? '';
     
-    if (empty($izenAbizen) || empty($nan) || empty($email) || empty($pasahitza)) {
-        $_SESSION['error_message'] = "Eremu gutziak bete behar dira.";
-        header('Location: /register.php');
-        exit;
-    }
+      if (empty($izenAbizen) || empty($nan) || empty($email) || empty($pasahitza)) {
+            $error_message = "Eremu gutziak bete behar dira.";
+        } else {
+            $hashedPassword = md5($pasahitza); // o password_hash si quieres más seguridad
     
-    $hashedPassword = md5($pasahitza);
+            try {
+                $pdo = new PDO($dsn, $user, $pass, $options);
     
-    try {
-        $pdo = new PDO($dsn, $user, $pass, $options);
-    
-        $sql = "INSERT INTO erabiltzaileak (izen_abizen, nan, telefonoa, jaiotze_data, email, erabiltzaile_izena, pasahitza) 
-                VALUES (?, ?, ?, ?, ?, ?, ?)";
-    
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([
-            $izenAbizen, 
-            $nan, 
-            $telefonoa, 
-            $jaiotzeData, 
-            $email, 
-            $erabiltzaileIzena, 
-            $hashedPassword
-        ]);
-    
+                $sql = "INSERT INTO erabiltzaileak 
+                        (izen_abizen, nan, telefonoa, jaiotze_data, email, erabiltzaile_izena, pasahitza)
+                        VALUES (?, ?, ?, ?, ?, ?, ?)";
+                $stmt = $pdo->prepare($sql);
+                $stmt->execute([
+                    $izenAbizen, 
+                    $nan, 
+                    $telefonoa, 
+                    $jaiotzeData, 
+                    $email, 
+                    $erabiltzaileIzena, 
+                    $hashedPassword
+                ]);
+        
         $_SESSION['user_id'] = $pdo->lastInsertId();
         $_SESSION['user_name'] = $izenAbizen;
         
