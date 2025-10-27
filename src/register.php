@@ -60,10 +60,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header('Location: index.php');
         exit;
     } catch (PDOException $e) {
-    if ($e->getCode() === '23000') {
-        $error_message = "Errorea: NAN, email edo erabiltzaile izena dagoeneko erregistratuta dago.";
-    } else {
-        $error_message = "Errorea datu-basean: " . $e->getMessage();
+        if ($e->getCode() === '23000') {
+            $error_message = "Errorea: NAN, email edo erabiltzaile izena dagoeneko erregistratuta dago.";
+        } else {
+            $error_message = "Errorea datu-basean: " . $e->getMessage();
+        }
     }
 }
 }
