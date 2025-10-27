@@ -1,18 +1,22 @@
 <?php
 
-$host = "db";           // docker-compose-n DB-aren izena
-$erabiltzaile = "admin"; 
-$pasahitza = "test";     
-$base = "database";     
+$host = "db";           
+$user = "admin";
+$pass = "test"; 
+$db   = "database";     
+$charset = 'utf8mb4';
 
+$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
+$options = [
+    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+    PDO::ATTR_EMULATE_PREPARES   => false,
+];
 
-$konexioa = new mysqli($host, $erabiltzaile, $pasahitza, $base);
-
-
-if ($konexioa->connect_error) {
-    die("Ezin izan da konektatu: " . $conn->connect_error);
+try {
+    $pdo = new PDO($dsn, $user, $pass, $options);
+} catch (PDOException $e) {
+    // Si la conexión falla, se detiene el script con un mensaje
+    die("Ezin izan da konektatu datu-basera: " . $e->getMessage());
 }
-
-
-$konexioa->set_charset("utf8mb4");
 ?>

@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         $pdo = new PDO($dsn, $user, $pass, $options);
     
-        $sql = "INSERT INTO usuarios (izen_abizen, nan, telefonoa, jaiotze_data, email, erabiltzaile_izena, pasahitza) 
+        $sql = "INSERT INTO erabiltzaileak (izen_abizen, nan, telefonoa, jaiotze_data, email, erabiltzaile_izena, pasahitza) 
                 VALUES (?, ?, ?, ?, ?, ?, ?)";
     
         $stmt = $pdo->prepare($sql);
@@ -68,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $_SESSION['error_message'] = "Errorea datu-basean: " . $e->getMessage();
         }
-        header('Location: /src/register.php');
+        header('Location: /index.php');
         exit;
     }
 }
@@ -84,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head> 
 <body>
     
-    <form id="register_form" method="POST" action="/src/register.php">
+    <form id="register_form" method="POST" action="register.php">
         <h1>Erabiltzailearen erregistroa</h1>   
 
         <div><label for="izen_abizen">Izen Abizenak</label>
@@ -118,6 +118,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <button type="submit" id="register_submit">Erregistratu</button>
     </form>
 
-    <p id="login_link">Baduzu jada kontu bat? <a href="login.html">Saioa hasi hemen</a></p>
+    <p id="login_link">Baduzu jada kontu bat? <a href="login.php">Saioa hasi hemen</a></p>
+    <script src="assets/validation.js"></script>
 </body>
 </html>

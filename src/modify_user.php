@@ -1,0 +1,203 @@
+<?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+session_start();
+
+// 1. Verificar Sesión
+if (!isset($_SESSION['user_id'])) {
+    $_SESSION['error_message'] = "Saioa hasi behar duzu zure profila aldatzeko.";
+    header('Location: /login.php');
+    exit;
+}
+
+// --- CONFIGURACIÓN DE BASE DE DATOS (PDO) ---
+$host = 'db';
+$db   = 'database';
+$user = 'admin'; 
+$pass = 'test';  
+$charset = 'utf8mb4';
+
+$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
+$options = [
+    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+    PDO::ATTR_EMULATE_PREPARES   => false,
+];
+
+$error_message = '';
+$success_message = '';
+$user_id = $_SESSION['user_id'];
+$user_data = null;
+
+try {
+    $pdo = new PDO($dsn, $user, $pass, $options);
+} catch (PDOException $e) {
+    die("Errorea datu-basean: " . $e->getMessage());
+}
+
+// ---------------------------------------------
+// 2. Carga Inicial de Datos del Usuario
+// ---------------------------------------------
+try {
+    $sql_fetch = "SELECT izen_abizen, nan, telefonoa, jaiotze_data, email, erabiltzaile_izena 
+                  FROM usuarios 
+                  WHERE id = ?";
+    $stmt_fetch = $pdo->prepare($sql_fetch);
+    $stmt_fetch->execute([$user_id]);
+    $user_data = $stmt_fetch->fetch();
+
+    if (!$user_data) {
+        // Esto no debería pasar si el usuario está logueado, pero es una protección
+        session_destroy();
+        header('Location: /login.php');
+        exit;
+    }
+
+} catch (PDOException $e) {
+    $error_message = "Errorea datuak kargatzean.";
+}
+
+// ---------------------------------------------
+// 3. Procesar la Modificación (POST)
+// ---------------------------------------------
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    
+    $izen_abizen = htmlspecialchars(trim($_POST['izen_abizen'] ?? ''));
+    $nan = htmlspecialchars(trim($_POST['nan'] ?? ''));
+    $telefonoa = htmlspecialchars(trim($_POST['telefonoa'] ?? ''));
+    $jaiotze_data = htmlspecialchars(trim($_POST['jaiotze_data'] ?? ''));
+    $email = htmlspecialchars(trim($_POST['email'] ?? ''));
+    $erabiltzaile_izena = htmlspecialchars(trim($_POST['erabiltzaile_izena'] ?? ''));
+    $pasahitza_berria = $_POST['pasahitza_berria'] ?? '';
+    $pasahitza_konfirm = $_POST['pasahitza_konfirm'] ?? '';
+
+    // Validaciones básicas
+    if (empty($izen_abizen) || empty($nan) || empty($email) || empty($erabiltzaile_izena)) {
+        $error_message = "Izen-abizenak, NANa, E-maila eta Erabiltzaile izena derrigorrezkoak dira.";
+    } elseif ($pasahitza_berria != $pasahitza_konfirm) {
+        $error_message = "Pasahitz berriak ez datoz bat.";
+    } else {
+        // Iniciar la construcción de la consulta y los parámetros
+        $set_parts = [];
+        $params = [];
+        
+        // --- 3.1. Validar unicidad (Email y Username) ---
+        $sql_check = "SELECT id FROM usuarios WHERE (email = ? OR erabiltzaile_izena = ?) AND id != ?";
+        $stmt_check = $pdo->prepare($sql_check);
+        $stmt_check->execute([$email, $erabiltzaile_izena, $user_id]);
+        
+        if ($stmt_check->fetch()) {
+            $error_message = "E-mail edo erabiltzaile izen hori dagoeneko erabilita dago.";
+        } else {
+            // --- 3.2. Construir la consulta de UPDATE ---
+            $set_parts[] = "izen_abizen = ?"; $params[] = $izen_abizen;
+            $set_parts[] = "nan = ?"; $params[] = $nan;
+            $set_parts[] = "telefonoa = ?"; $params[] = $telefonoa;
+            $set_parts[] = "jaiotze_data = ?"; $params[] = $jaiotze_data;
+            $set_parts[] = "email = ?"; $params[] = $email;
+            $set_parts[] = "erabiltzaile_izena = ?"; $params[] = $erabiltzaile_izena;
+
+            // Procesar la contraseña si se proporciona
+            if (!empty($pasahitza_berria)) {
+                $hashed_password = password_hash($pasahitza_berria, PASSWORD_DEFAULT);
+                $set_parts[] = "pasahitza = ?"; $params[] = $hashed_password;
+            }
+
+            // --- 3.3. Ejecutar UPDATE ---
+            $sql_update = "UPDATE usuarios SET " . implode(', ', $set_parts) . " WHERE id = ?";
+            $params[] = $user_id; // Añadir el ID al final
+
+            try {
+                $stmt_update = $pdo->prepare($sql_update);
+                $stmt_update->execute($params);
+                
+                $success_message = "Profila arrakastaz eguneratu da!";
+                
+                // Actualizar la sesión con el nuevo nombre/username si cambiaron
+                $_SESSION['username'] = $erabiltzaile_izena;
+                $_SESSION['user_name'] = $izen_abizen;
+                
+                // Recargar datos para prellenar el formulario correctamente
+                $user_data = [
+                    'izen_abizen' => $izen_abizen, 'nan' => $nan, 'telefonoa' => $telefonoa, 
+                    'jaiotze_data' => $jaiotze_data, 'email' => $email, 
+                    'erabiltzaile_izena' => $erabiltzaile_izena
+                ];
+
+            } catch (PDOException $e) {
+                $error_message = "Errorea profila eguneratzean. Saiatu berriro.";
+            }
+        }
+    }
+}
+?>
+
+<!DOCTYPE html>
+<html lang="eu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nire Profila Aldatu</title>
+    <link rel="stylesheet" href="assets/styleHas.css">
+</head> 
+<body>
+
+    <h1>Nire Profila Aldatu</h1>
+    <p><a href="/">Hasierara Itzuli</a> | <a href="/items.php">Nire Maskotak</a></p>
+
+    <?php if (!empty($error_message)): ?>
+        <p style="color: red; border: 1px solid red; padding: 10px;"><?php echo htmlspecialchars($error_message); ?></p>
+    <?php endif; ?>
+
+    <?php if (!empty($success_message)): ?>
+        <p style="color: green; border: 1px solid green; padding: 10px;"><?php echo htmlspecialchars($success_message); ?></p>
+    <?php endif; ?>
+
+    <form id="modify_user_form" method="POST" action="/modify_user.php"> 
+        <div>
+            <label for="izen_abizen">Izen-Abizenak:</label>
+            <input type="text" id="izen_abizen" name="izen_abizen" required 
+                   value="<?php echo htmlspecialchars($user_data['izen_abizen'] ?? ''); ?>">
+        </div>
+        <div>
+            <label for="nan">NAN:</label>
+            <input type="text" id="nan" name="nan" required 
+                   value="<?php echo htmlspecialchars($user_data['nan'] ?? ''); ?>">
+        </div>
+        <div>
+            <label for="telefonoa">Telefonoa:</label>
+            <input type="text" id="telefonoa" name="telefonoa" 
+                   value="<?php echo htmlspecialchars($user_data['telefonoa'] ?? ''); ?>">
+        </div>
+        <div>
+            <label for="jaiotze_data">Jaiotze Data:</label>
+            <input type="date" id="jaiotze_data" name="jaiotze_data" 
+                   value="<?php echo htmlspecialchars($user_data['jaiotze_data'] ?? ''); ?>">
+        </div>
+        <div>
+            <label for="email">E-maila:</label>
+            <input type="email" id="email" name="email" required 
+                   value="<?php echo htmlspecialchars($user_data['email'] ?? ''); ?>">
+        </div>
+        <div>
+            <label for="erabiltzaile_izena">Erabiltzaile Izena:</label>
+            <input type="text" id="erabiltzaile_izena" name="erabiltzaile_izena" required 
+                   value="<?php echo htmlspecialchars($user_data['erabiltzaile_izena'] ?? ''); ?>">
+        </div>
+        <hr>
+        <h3>Pasahitza aldatu (aukerakoa)</h3>
+        <div>
+            <label for="pasahitza_berria">Pasahitz Berria:</label>
+            <input type="password" id="pasahitza_berria" name="pasahitza_berria" placeholder="****">
+        </div>
+        <div>
+            <label for="pasahitza_konfirm">Pasahitz Berria Konfirm: </label>
+            <input type="password" id="pasahitza_konfirm" name="pasahitza_konfirm" placeholder="****">
+        </div>
+
+        <button type="submit">Aldaketak Gorde</button>
+    </form>
+
+</body>
+</html>
