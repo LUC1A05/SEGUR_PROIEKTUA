@@ -67,7 +67,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
     
-    <?php if(isset($error)) echo "<p style='color:red;'>$error</p>"; ?>
+    <?php if (!empty($error_message)): ?>
+        <p style="color:red;"><?= htmlspecialchars($error_message) ?></p>
+    <?php endif; ?>
+
     
     <form id="login_form" method="POST" action="login.php">
         <h1>Saioa hasi</h1>
