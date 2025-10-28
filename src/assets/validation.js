@@ -1,7 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
     const inprimakia = document.getElementById('register_form');
 
-    inprimakia.addEventListener('submit', function(event) {
+    inprimakia.addEventListener('submit', async function(event) {
+        event.preventDefault();
         let baliozko = true;
 
         // Aurreko erroreak garbitu
@@ -12,12 +13,16 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!balioztatuTelefonoa()) baliozko = false;
         if (!balioztatuJaiotzeData()) baliozko = false;
         if (!balioztatuEmaila()) baliozko = false;
+
+        const erabilgarri = await egiaztatuErabiltzaileIzena();
+        if (!erabilgarri) baliozko = false;
         
         if (!baliozko) {
             event.preventDefault();
             console.log('Formularioa ez da bidali. Balioztatze erroreak.');
         } else {
             console.log('Formularioa baliozkoa. Datuak bidaltzen...');
+            inprimakia.submit();
         }
     });
 
@@ -103,6 +108,32 @@ document.addEventListener('DOMContentLoaded', function() {
             return false;
         }
         return true;
+    }
+
+    async function egiaztatuErabiltzaileIzena() {
+        const sarrera = document.getElementById('erabiltzaile_izena');
+        const izena = sarrera.value.trim();
+
+        if (izena === '') {
+            erakutsiErrorea('erabiltzaile_izena_errorea', 'Erabiltzaile izena ezin da hutsik egon.');
+            return false;
+        }
+
+        try {
+            const erantzuna = await fetch(`assets/checkErabiltzailea.php?erabiltzaile_izena=${encodeURIComponent(izena)}`);
+            const data = await erantzuna.json();
+
+            if (!data.available){
+                erakutsiErrorea('erabiltzaile_izena_errorea', 'Erabiltzaile izena ez dago erabilgarri.');
+                return false;
+            }
+
+            errorea.textContent = '';
+            return true;
+        } catch (e) {
+            erakutsiErrorea('erabiltzaile_izena_errorea', 'Errorea zerbitzariarekin konektatzean.');
+            return false;
+        }
     }
 
     function erakutsiErrorea(id, mezua) {
