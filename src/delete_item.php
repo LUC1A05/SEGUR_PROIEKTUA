@@ -4,13 +4,13 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 session_start();
 
-// Redirigir si no está logueado
+// logeatuta ez badago, login-era bideratu
 if (!isset($_SESSION['user_id'])) {
     header('Location: /login.php');
     exit;
 }
 
-// --- CONFIGURACIÓN DE BASE DE DATOS (PDO) ---
+// --- datu basearen konfigurazioa (PDO) ---
 $host = 'db';
 $db   = 'database';
 $user = 'admin'; 
@@ -27,7 +27,7 @@ $options = [
 $user_id = $_SESSION['user_id'];
 $item_id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
-// 1. Verificar que se recibió un ID válido
+// 1. id baliozko bat jaso dela berifikatu
 if (!$item_id) {
     $_SESSION['error_message'] = "Ez da maskota ID baliozko bat jaso.";
     header('Location: /items.php');
@@ -36,18 +36,17 @@ if (!$item_id) {
 
 try {
     $pdo = new PDO($dsn, $user, $pass, $options);
-    
-    // 2. Ejecutar la eliminación, VERIFICANDO QUE EL PROPIETARIO COINCIDA
-    $sql = "DELETE FROM maskotak WHERE id = ? AND propietario_id = ?";
+
+    // 2. Ezabatzeko exekutatu, PROPIETARIOA BATZUKO DENEAN
+    $sql = "DELETE FROM maskotak WHERE id = ? AND jabea_id = ?";
     
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$item_id, $user_id]);
     
-    // 3. Verificar si se eliminó alguna fila
+    // 3. Emaitzak kudeatu
     if ($stmt->rowCount() > 0) {
         $_SESSION['success_message'] = "Maskota arrakastaz ezabatu da.";
     } else {
-        // Esto puede pasar si el ID no existe O si el propietario_id no coincide
         $_SESSION['error_message'] = "Ezin izan da maskota aurkitu edo ez duzu baimenik hura ezabatzeko.";
     }
     
@@ -55,7 +54,7 @@ try {
     $_SESSION['error_message'] = "Errorea datu-basean ezabatzean.";
 }
 
-// 4. Redirigir siempre a la lista de items
+// 4. Beti item-en zerrendara birbideratu
 header('Location: /items.php');
 exit;
 ?>

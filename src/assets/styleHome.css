@@ -5,7 +5,7 @@
 body {
     margin: 0;
     font-family: 'Montserrat';
-    background: linear-gradient(#e2ffe79e, #e2ffe7) no-repeat center center fixed, url('../images/background.webp') no-repeat center center fixed;
+    background: linear-gradient(#e2ffe79e, #bdffc881) no-repeat center center fixed, url('../images/background.webp') no-repeat center center fixed;
     color: #101632dd;
     background-size: auto, cover;
 }
@@ -123,6 +123,7 @@ div, ul, nav, header, footer, a, li, label {
     color: #38a169;
     margin-top: 0;
     margin-bottom: 20px;
+    position: center;
     font-weight: 700;
 }
 

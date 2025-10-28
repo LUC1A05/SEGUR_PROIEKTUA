@@ -4,13 +4,13 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 session_start();
 
-// Redirigir si no está logueado
+// logeatuta ez badago, login-era bideratu
 if (!isset($_SESSION['user_id'])) {
     header('Location: /login.php');
     exit;
 }
 
-// --- CONFIGURACIÓN DE BASE DE DATOS (PDO) ---
+// --- datu basearen konfigurazioa (PDO) ---
 $host = 'db';
 $db   = 'database';
 $user = 'admin'; 
@@ -42,24 +42,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $adina = (int)($_POST['adina'] ?? 0);
     $sexua = htmlspecialchars(trim($_POST['sexua'] ?? ''));
     $deskribapena = htmlspecialchars(trim($_POST['deskribapena'] ?? ''));
+    $irudia = null;
+    if (isset($_FILES['irudia']) && $_FILES['irudia']['error'] === UPLOAD_ERR_OK) {
+        $irudia = file_get_contents($_FILES['irudia']['tmp_name']);
+    }  
 
     if (empty($izena) || empty($espeziea) || empty($sexua)) {
         $error_message = "Maskota (izena, espeziea, sexua) eremuak bete behar dira.";
     } else {
         try {
-            $sql = "INSERT INTO maskotak (maskotaren_izena, espeziea, arraza, adina, sexua, deskribapena, jabea_id) 
-                    VALUES (?, ?, ?, ?, ?, ?, ?)";
-            
+            $sql = "INSERT INTO maskotak (maskotaren_izena, espeziea, arraza, adina, sexua, deskribapena, jabea_id, irudia) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
             $stmt = $pdo->prepare($sql);
-            $stmt->execute([
-                $izena, 
-                $espeziea, 
-                $arraza, 
-                $adina, 
-                $sexua, 
-                $deskribapena,
-                $user_id 
-            ]);
+
+            $stmt->bindParam(1, $izena);
+            $stmt->bindParam(2, $espeziea);
+            $stmt->bindParam(3, $arraza);
+            $stmt->bindParam(4, $adina, PDO::PARAM_INT);
+            $stmt->bindParam(5, $sexua);
+            $stmt->bindParam(6, $deskribapena);
+            $stmt->bindParam(7, $user_id, PDO::PARAM_INT);
+            
+            $stmt->bindParam(8, $irudia, PDO::PARAM_LOB); 
+        
+            $stmt->execute();
             
             $success_message = "Maskota berria arrakastaz erregistratu da!";
             header('Location: /items.php');
@@ -82,14 +89,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head> 
 <body>
 
-    <h1>Maskota Berria Erregistratu</h1>
     <p><a href="/items.php">Maskoten Zerrendara Itzuli</a></p>
-
+    
     <?php if (!empty($error_message)): ?>
         <p style="color: red; border: 1px solid red; padding: 10px;"><?php echo htmlspecialchars($error_message); ?></p>
-    <?php endif; ?>
-
-    <form id="add_item_form" method="POST" action="/add_item.php"> 
+        <?php endif; ?>
+        
+    <form id="add_item_form" method="POST" action="/add_item.php" enctype="multipart/form-data"> 
+            <h1>Maskota Berria Erregistratu</h1>
         <div>
             <label for="maskotaren_izena">Maskota Izena:</label>
             <input type="text" id="maskotaren_izena" name="maskotaren_izena" required>
@@ -117,6 +124,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div>
             <label for="deskribapena">Deskribapena:</label>
             <textarea id="deskribapena" name="deskribapena"></textarea>
+        </div>
+        <div>
+            <label for="irudia">Irudia (Opcional):</label>
+            <input type="file" id="irudia" name="irudia" accept="image/*">
         </div>
 
         <button type="submit">Gorde Maskota</button>

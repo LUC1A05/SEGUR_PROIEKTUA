@@ -95,8 +95,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                            arraza = ?, 
                            adina = ?, 
                            sexua = ?, 
-                           deskribapena = ? 
-                           WHERE id = ? AND propietario_id = ?";
+                           deskribapena = ?
+                           WHERE id = ? AND jabea_id = ?";
             
             $stmt_update = $pdo->prepare($sql_update);
             $stmt_update->execute([
@@ -149,7 +149,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <p style="color: green; border: 1px solid green; padding: 10px;"><?php echo htmlspecialchars($success_message); ?></p>
     <?php endif; ?>
 
-    <form id="modify_item_form" method="POST" action="/modify_item.php?id=<?php echo $item_id; ?>"> 
+    <form id="modify_item_form" method="POST" action="/modify_item.php?id=<?php echo $item_id; ?>" enctype="multipart/form-data"> 
         
         <input type="hidden" name="id" value="<?php echo $item_id; ?>">
 
