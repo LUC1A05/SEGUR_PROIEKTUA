@@ -56,11 +56,8 @@ try {
 </head> 
 <body>
     <header class="header">
-
-        <p><a href="/">Hasiera</a> | <a href="/logout.php">Saioa itxi</a></p>
-        
+        <p><a href="/">Hasiera</a></p>
         <p><a href="/add_item.php" style="font-weight: bold;">+ Maskota Berria Erregistratu</a></p>
-    
     </header>
     
     <?php if (!empty($error_message)): ?>
