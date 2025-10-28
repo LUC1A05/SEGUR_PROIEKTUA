@@ -1,116 +1,112 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('register_form');
+    const inprimakia = document.getElementById('register_form');
 
-    form.addEventListener('submit', function(event) {
-        let isValid = true;
+    inprimakia.addEventListener('submit', function(event) {
+        let baliozko = true;
 
+        // Aurreko erroreak garbitu
         document.querySelectorAll('.error').forEach(span => span.textContent = '');
 
-        if (!validateNombreApellidos()) isValid = false;
-        if (!validateNAN()) isValid = false;
-        if (!validateTelefono()) isValid = false;
-        if (!validateFecha()) isValid = false;
-        if (!validateEmail()) isValid = false;
+        if (!balioztatuIzenAbizenak()) baliozko = false;
+        if (!balioztatuNAN()) baliozko = false;
+        if (!balioztatuTelefonoa()) baliozko = false;
+        if (!balioztatuJaiotzeData()) baliozko = false;
+        if (!balioztatuEmaila()) baliozko = false;
         
-        if (!isValid) {
+        if (!baliozko) {
             event.preventDefault();
-            console.log('Formulario no enviado. Errores de validación.');
+            console.log('Formularioa ez da bidali. Balioztatze erroreak.');
         } else {
-            console.log('Formulario válido. Enviando datos (a la espera del backend PHP)...');
+            console.log('Formularioa baliozkoa. Datuak bidaltzen...');
         }
     });
 
-
-    // 1. Izen abizenak: Solo texto
-    function validateNombreApellidos() {
-        const input = document.getElementById('izen_abizen');
-        const value = input.value.trim();
-
+    // 1. Izen abizenak: letra eta espazio bakarrik
+    function balioztatuIzenAbizenak() {
+        const sarrera = document.getElementById('izen_abizen');
+        const balioa = sarrera.value.trim();
         const regex = /^[A-Za-zñÑáéíóúÁÉÍÓÚ\s]+$/;
 
-        if (!regex.test(value)) {
-            document.getElementById('izen_abizen_errorea').textContent = 'Soilik testua bahimentzen da.';
+        if (!regex.test(balioa)) {
+            erakutsiErrorea('izen_abizen_errorea', 'Letra eta espazio bakarrik onartzen dira.');
             return false;
         }
         return true;
     }
 
-    // 2. NAN: 11111111-Z formatua ETA letra zuzena
-    function validateNAN() {
-        const input = document.getElementById('nan');
-        const value = input.value.toUpperCase().trim();
-    
-        const formatRegex = /^\d{8}-[A-Z]$/;
-        
-        if (!formatRegex.test(value)) {
-            document.getElementById('nan_errorea').textContent = 'Formatu ez zuzena (ej: 11111111-Z).';
+    // 2. NAN: 12345678-Z formatoa eta letra zuzena
+    function balioztatuNAN() {
+        const sarrera = document.getElementById('nan');
+        const balioa = sarrera.value.toUpperCase().trim();
+
+        const formatuaRegex = /^\d{8}-[A-Z]$/;
+        if (!formatuaRegex.test(balioa)) {
+            erakutsiErrorea('nan_errorea', 'Formatoa okerra (adib: 12345678-Z).');
             return false;
         }
-        
-        const parts = value.split('-');
-        const number = parseInt(parts[0], 10);
-        const letter = parts[1];
 
-        const validLetters = "TRWAGMYFPDXBNJZSQVHLCKE";
-        const expectedLetter = validLetters.charAt(number % 23);
+        const [zenbakiaStr, letra] = balioa.split('-');
+        const zenbakia = parseInt(zenbakiaStr, 10);
+        const letrakBaliozkoak = "TRWAGMYFPDXBNJZSQVHLCKE";
+        const letraEspero = letrakBaliozkoak[zenbakia % 23];
 
-        if (expectedLetter !== letter) {
-            document.getElementById('nan_errorea').textContent = 'NAN ez zuzena, letra ez da espro dena.';
+        if (letra !== letraEspero) {
+            erakutsiErrorea('nan_errorea', 'NAN-aren letra ez da zuzena.');
             return false;
         }
-        
+
         return true;
     }
 
-    // 3. Telefonoa: 9 zenbaki soilik
-    function validateTelefono() {
-        const input = document.getElementById('telefonoa');
-        const value = input.value.trim();
-
+    // 3. Telefonoa
+    function balioztatuTelefonoa() {
+        const sarrera = document.getElementById('telefonoa');
+        const balioa = sarrera.value.trim();
         const regex = /^\d{9}$/;
 
-        if (!regex.test(value)) {
-            document.getElementById('telefonoa_errorea').textContent = '9 zenbaki eduki behar ditu telefonoa.';
+        if (!regex.test(balioa)) {
+            erakutsiErrorea('telefonoa_errorea', 'Telefonoak 9 digitu izan behar ditu.');
             return false;
         }
         return true;
     }
 
-    // 4. Jaiotze data: uuuu-hh-ee formatuan
-    function validateFecha() {
-        const input = document.getElementById('jaiotze_data');
-        const value = input.value.trim();
-
+    // 4. Jaiotze data
+    function balioztatuJaiotzeData() {
+        const sarrera = document.getElementById('jaiotze_data');
+        const balioa = sarrera.value.trim();
         const regex = /^\d{4}-\d{2}-\d{2}$/;
 
-        if (!regex.test(value)) {
-            document.getElementById('jaiotze_data_errorea').textContent = 'Formatu ez zuzena (YYYY-MM-DD).';
+        if (!regex.test(balioa)) {
+            erakutsiErrorea('jaiotze_data_errorea', 'Egitura ez da egokia (YYYY-MM-DD).');
             return false;
         }
-        
-        const zatiak = value.split("-");
-        const urtea = parseInt(zatiak[0], 10);
-        const hilabetea = parseInt(zatiak[1], 10);
-        const eguna = parseInt(zatiak[2], 10);
 
-        if(hilabetea > 12 || eguna > 31){
-            document.getElementById('jaiotze_data_errorea').textContent = 'Data ez zuzena. Ez da existitzen.'
+        const [urtea, hila, eguna] = balioa.split('-').map(Number);
+        const data = new Date(urtea, hila - 1, eguna);
+
+        if (data.getFullYear() !== urtea || data.getMonth() + 1 !== hila || data.getDate() !== eguna) {
+            erakutsiErrorea('jaiotze_data_errorea', 'Ez da baliozkoa.');
+            return false;
         }
-        // *Opcional: Se podrían añadir validaciones más complejas aquí (ej. si es una fecha real, o si no es futuro)
         return true;
     }
 
-    // 5. Email: Formato estándar
-    function validateEmail() {
-        const input = document.getElementById('email');
-        const value = input.value.trim();
-
+    // 5. Emaila
+    function balioztatuEmaila() {
+        const sarrera = document.getElementById('email');
+        const balioa = sarrera.value.trim();
         const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-        if (!regex.test(value)) {
-            document.getElementById('email_errorea').textContent = 'Email zuzen bat sartu.';
+        if (!regex.test(balioa)) {
+            erakutsiErrorea('email_errorea', 'Email ez da baliozkoa.');
             return false;
         }
         return true;
+    }
+
+    function erakutsiErrorea(id, mezua) {
+        const span = document.getElementById(id);
+        if (span) span.textContent = mezua;
     }
 });
