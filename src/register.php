@@ -33,39 +33,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error_message = "Eremu gutziak bete behar dira.";
     } elseif (!preg_match("/^[a-zA-ZÀ-ÿ\s]+$/u", $izenAbizen)) {
         $error_message = "Izen-abizenak ez dira baliozkoak. Letra bakarrik eta espazioak onartzen dira.";
-    } elseif (!preg_match("/^\d{8}-[A-Z]$/", strtoupper($nan))) {
-        $error_message = "NAN ez da baliozkoa. Formatoa: 12345678-Z";
-    } elseif (!preg_match("/^\d{9}$/", $telefonoa)) {
+    } 
+    if (!isset($error_message)) {
+        if (!preg_match("/^\d{8}-[A-Z]$/", $nan)) {
+            $error_message = "NAN ez da baliozkoa. Egitura: 12345678-Z";
+        } else {
+            $zatiak = explode('-', $nan);
+            $zenbakia = intval($zatiak[0]);
+            $letra = $zatiak[1];
+            $baliozkoLetrak = "TRWAGMYFPDXBNJZSQVHLCKE";
+            $OndoDagoena = $baliozkoLetrak[$zenbakia % 23];
+    
+            if ($letra !== $OndoDagoena) {
+                $error_message = "NAN letra ez da zuzena.";
+            }
+        }
+    }
+   if (!isset($error_message) && !preg_match("/^\d{9}$/", $telefonoa)) {
         $error_message = "Telefonoa ez da baliozkoa. 9 digitu behar ditu.";
-    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    }
+
+    if (!isset($error_message) && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $error_message = "Email ez da baliozkoa.";
     }
 
-    if (empty($error_message)) {
+    if (!isset($error_message)) {
         try {
             $pdo = new PDO($dsn, $user, $pass, $options);
-
-            $hashedPassword = md5($pasahitza); // o password_hash
+            $hashedPassword = password_hash($pasahitza, PASSWORD_DEFAULT);
             $sql = "INSERT INTO erabiltzaileak 
                     (izen_abizen, nan, telefonoa, jaiotze_data, email, erabiltzaile_izena, pasahitza)
                     VALUES (?, ?, ?, ?, ?, ?, ?)";
             $stmt = $pdo->prepare($sql);
             $stmt->execute([
-                $izenAbizen, 
-                $nan, 
-                $telefonoa, 
-                $jaiotzeData, 
-                $email, 
-                $erabiltzaileIzena, 
+                $izenAbizen,
+                $nan,
+                $telefonoa,
+                $jaiotzeData,
+                $email,
+                $erabiltzaileIzena,
                 $hashedPassword
             ]);
 
             $_SESSION['user_id'] = $pdo->lastInsertId();
             $_SESSION['user_name'] = $izenAbizen;
 
-            unset($_SESSION['error_message']);
-            unset($_SESSION['form_data']); 
-
+            unset($_SESSION['error_message'], $_SESSION['form_data']);
             header('Location: index.php');
             exit;
         } catch (PDOException $e) {
@@ -78,6 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="es">
