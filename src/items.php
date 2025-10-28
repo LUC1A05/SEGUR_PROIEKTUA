@@ -32,7 +32,7 @@ try {
     $pdo = new PDO($dsn, $user, $pass, $options);
     
     // 1. Maskoten lista atzitu
-    $sql_list = "SELECT id, maskotaren_izena, espeziea, arraza, adina, sexua, deskribapena 
+    $sql_list = "SELECT id, maskotaren_izena, espeziea, arraza, adina, sexua, deskribapena, irudia 
                  FROM maskotak 
                  WHERE jabea_id = ?";
     
@@ -51,47 +51,59 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nire Maskotak</title>
-    <link rel="stylesheet" href="assets/styleHas.css">
-    <style>
-        /* Estiloak */
-        .maskota-txartela { 
-            border: 1px solid #ccc; 
-            padding: 15px; 
-            margin-bottom: 15px; 
-            border-radius: 5px;
-            background-color: #f9f9f9;
-        }
-        .maskota-txartela a { margin-left: 10px; color: red; text-decoration: none; }
-    </style>
+    <link rel="stylesheet" href="assets/styleItems.css">
+    
 </head> 
 <body>
+    <header class="header">
 
-    <h1>Nire Maskotak</h1>
-    <p><a href="/">Hasiera</a> | <a href="/logout.php">Saioa itxi</a></p>
+        <p><a href="/">Hasiera</a> | <a href="/logout.php">Saioa itxi</a></p>
+        
+        <p><a href="/add_item.php" style="font-weight: bold;">+ Maskota Berria Erregistratu</a></p>
     
-    <p><a href="/add_item.php" style="font-weight: bold;">+ Maskota Berria Erregistratu</a></p>
-
+    </header>
+    
     <?php if (!empty($error_message)): ?>
         <p style="color: red; border: 1px solid red; padding: 10px;"><?php echo htmlspecialchars($error_message); ?></p>
-    <?php endif; ?>
-
+        <?php endif; ?>
+        
     <div class="maskota-zerrenda">
+        <h1>Nire Maskotak</h1>
         <?php if (empty($maskotak)): ?>
             <p>Oraindik ez duzu maskotarik erregistratu. Gehitu bat goiko estekatik.</p>
         <?php else: ?>
             <?php foreach ($maskotak as $maskota): ?>
                 <div class="maskota-txartela">
-                    <h3><?php echo htmlspecialchars($maskota['maskotaren_izena']); ?></h3>
-                    <p>
-                        <a href="/modify_item.php?id=<?php echo $maskota['id']; ?>" style="color: blue; text-decoration: none;">
-                        Aldatu
-                        </a>
-                        
-                        <a href="/delete_item.php?id=<?php echo $maskota['id']; ?>" 
-                        onclick="return confirm('Ziur zaude <?php echo htmlspecialchars($maskota['maskotaren_izena']); ?> ezabatu nahi duzula?');">
-                        | Ezabatu
-                        </a>
-                    </p>
+                    <?php if (!empty($maskota['irudia'])): ?>
+                        <div class="maskota-irudia">
+                            <?php
+                                $imgData = base64_encode($maskota['irudia']);
+                                $src = 'data:image/jpeg;base64,' . $imgData;
+                            ?>
+                            <img src="<?php echo $src; ?>" alt="Irudia: <?php echo htmlspecialchars($maskota['maskotaren_izena']); ?>">
+                        </div>
+                    <?php endif; ?>
+                    
+                    <div class="maskota-info"> 
+                        <h3><?php echo htmlspecialchars($maskota['maskotaren_izena']); ?></h3>
+                        <p>
+                            Espeziea: <b><?php echo htmlspecialchars($maskota['espeziea']); ?></b> | 
+                            Arraza: <?php echo htmlspecialchars($maskota['arraza'] ?? 'Ez dago') ; ?> | 
+                            Adina: <?php echo htmlspecialchars($maskota['adina'] ?? 'N/A'); ?>
+                        </p>
+                        <p style="font-size: 0.9em; color: #555;"><?php echo htmlspecialchars($maskota['deskribapena']); ?></p>
+
+                        <p>
+                            <a href="/modify_item.php?id=<?php echo $maskota['id']; ?>" style="color: blue; text-decoration: none;">
+                            Aldatu
+                            </a>
+                            
+                            <a href="/delete_item.php?id=<?php echo $maskota['id']; ?>" 
+                            onclick="return confirm('Ziur zaude <?php echo htmlspecialchars($maskota['maskotaren_izena']); ?> ezabatu nahi duzula?');">
+                            | Ezabatu
+                            </a>
+                        </p>
+                    </div> 
                 </div>
             <?php endforeach; ?>
         <?php endif; ?>
