@@ -106,7 +106,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <input type="text" id="espeziea" name="espeziea" required>
         </div>
         <div>
-            <label for="arraza">Arraza (Opcional):</label>
+            <label for="arraza">Arraza (Aukerazkoa):</label>
             <input type="text" id="arraza" name="arraza">
         </div>
         <div>
@@ -117,8 +117,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <label for="sexua">Sexua:</label>
             <select id="sexua" name="sexua" required>
                 <option value="">Aukeratu...</option>
-                <option value="Arra">Arra (Macho)</option>
-                <option value="Emea">Emea (Hembra)</option>
+                <option value="Arra">Arra</option>
+                <option value="Emea">Emea</option>
             </select>
         </div>
         <div>
@@ -126,7 +126,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <textarea id="deskribapena" name="deskribapena"></textarea>
         </div>
         <div>
-            <label for="irudia">Irudia (Opcional):</label>
+            <label for="irudia">Irudia (Aukerazkoa):</label>
             <input type="file" id="irudia" name="irudia" accept="image/*">
         </div>
 
