@@ -24,7 +24,9 @@ CREATE TABLE IF NOT EXISTS `maskotak` (
   `sexua` ENUM('Arra', 'Emea') NOT NULL,
   `deskribapena` TEXT,
   `jabea_id` INT NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  `irudia` LONGBLOB, 
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (jabea_id) REFERENCES erabiltzaileak(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Erabiltzaieen adibideen insert-a

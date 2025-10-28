@@ -3,46 +3,56 @@ session_start();
 require_once 'config/db.php';
 
 // user parametroa jaso den egiaztatu
-$erabId = $_GET['erabiltzaile'] ?? null;
+$erabId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
 if (!$erabId) {
-    die("Erabiltzaile ID-a behar da.");
+    header('Location: index.php');
+    exit;
 }
 
-$stmt = $konexioa->prepare("SELECT id, izena, abizenak, nan, telefonoa, jaiotze_data, email FROM erabiltzaileak WHERE id = ?");
-$stmt->bind_param("i", $erabId);
-$stmt->execute();
-$erantzuna = $stmt->get_result();
+$fila = null;
+try {
+    $sql = "SELECT id, izen_abizen, nan, telefonoa, jaiotze_data, email, erabiltzaile_izena FROM erabiltzaileak WHERE id = ?";
 
-if ($fila = $erantzuna->fetch_assoc()):
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$erabId]);
+    $fila = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$fila) {
+        header('Location: index.php');
+        exit;
+    }
+} catch (PDOException $e) {
+    die("Errorea datu-basean.");
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <title>Erabiltzailearen informazioa</title>
-    <link rel="stylesheet" href="assets/style.css">
+    <link rel="stylesheet" href="assets/styleShow.css">
 </head>
 <body>
-    <h1>Erabiltzailearen informazioa</h1>
-    <ul>
-        <li>Izena: <?= htmlspecialchars($fila['izena']) ?></li>
-        <li>Abizenak: <?= htmlspecialchars($fila['abizenak']) ?></li>
-        <li>NAN: <?= htmlspecialchars($fila['nan']) ?></li>
-        <li>Telefonoa: <?= htmlspecialchars($fila['telefonoa']) ?></li>
-        <li>Jaiotze Data: <?= htmlspecialchars($fila['jaiotze_data']) ?></li>
-        <li>Email: <?= htmlspecialchars($fila['email']) ?></li>
-    </ul>
+    <header class="navigation">
+        <nav class="header_nav">
+            <ul class="header_nav_list">
+                <li class="header_nav_item"><a href="/">Hasiera</a></li>
+            </ul>
+        </nav>
+    </header>
 
-    <p><a href="index.php">Itzuli hasierara</a></p>
+    <div class="fitxa">
+        <h1>Erabiltzailearen informazioa: <br> <?= htmlspecialchars($fila['izen_abizen']) ?></h1>
+        <div class="item-details">
+            <p>Izen Abizenak: <?= htmlspecialchars($fila['izen_abizen']) ?></p>
+            <p>NAN: <?= htmlspecialchars($fila['nan']) ?></p>
+            <p>Telefonoa: <?= htmlspecialchars($fila['telefonoa']) ?></p>
+            <p>Jaiotze Data: <?= htmlspecialchars($fila['jaiotze_data']) ?></p>
+            <p>Email: <?= htmlspecialchars($fila['email']) ?></p>
+            <p>Erabiltzaile izena: <?= htmlspecialchars($fila['erabiltzaile_izena']) ?></p>
+        </div>
+    </div>
 </body>
 </html>
-
-<?php
-else:
-    echo "Ez da erabiltzailea aurkitu.";
-endif;
-
-$stmt->close();
-$konexioa->close();
-?>

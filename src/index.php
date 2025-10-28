@@ -3,6 +3,35 @@ session_start();
 
 $is_logged_in = isset($_SESSION['user_id']);
 $username = $is_logged_in ? $_SESSION['user_name'] : '';
+
+$host='db';
+$db='database';
+$user='admin';
+$pass='test';
+$charset='utf8mb4';
+
+$dsn="mysql:host=$host;dbname=$db;charset=$charset";
+$options=[
+    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+    PDO::ATTR_EMULATE_PREPARES => false,
+];
+
+$error_message = '';
+$maskota_guztiak = [];
+
+try {
+    $pdo = new PDO($dsn, $user, $pass, $options);
+
+    $sql = "SELECT m.id, m.maskotaren_izena, m.espeziea, m.arraza, m.adina, m.sexua, m.deskribapena, m.irudia, e.izen_abizen, e.id AS jabea_id
+            FROM maskotak m 
+            JOIN erabiltzaileak e ON m.jabea_id = e.id";
+
+    $stmt_guztiak = $pdo->query($sql);
+    $maskota_guztiak = $stmt_guztiak->fetchAll();
+} catch (PDOException $e) {
+    $error_message = "Errorea datu-basean: Ezin izan dira maskotak kargatu.";
+}
 ?>
 
 
@@ -52,7 +81,43 @@ $username = $is_logged_in ? $_SESSION['user_name'] : '';
                     </p>
                 <?php endif; ?>
             </div>
+            <?php if (!empty($error_message)): ?>
+        <div class="maskota-zerrenda">
+            <p style="color: red; border: 1px solid red; padding: 10px;"><?php echo htmlspecialchars($error_message); ?></p>
         </div>
+    <?php endif; ?>
+        
+    <div class="maskota-zerrenda">
+        <h2>Komunitatearen Maskotak</h2>
+        
+        <?php if (empty($maskota_guztiak)): ?>
+            <p>Oraindik ez dago maskotarik erregistratuta komunitatean.</p>
+        <?php else: ?>
+            <?php foreach ($maskota_guztiak as $maskota): ?>
+                <div class="maskota-txartela">
+                    
+                    <?php if (!empty($maskota['irudia'])): ?>
+                        <div class="maskota-irudia">
+                            <?php
+                                $imgData = base64_encode($maskota['irudia']);
+                                $src = 'data:image/jpeg;base64,' . $imgData; // Usar el tipo MIME si lo guardaste
+                            ?>
+                            <img src="<?php echo $src; ?>" alt="Irudia: <?php echo htmlspecialchars($maskota['maskotaren_izena']); ?>">
+                        </div>
+                    <?php endif; ?>
+                    
+                    <div class="maskota-info"> 
+                        <h3><a href="show_item.php?id=<?php echo $maskota['id']; ?>"><?php echo htmlspecialchars($maskota['maskotaren_izena']); ?></a></h3>
+                        
+                        <p style="margin-top: 10px; padding-top: 5px; border-top: 1px solid #eee;">
+                            Jabea: <a href="show_user.php?id=<?php echo $maskota['jabea_id']; ?>"><b><?php echo htmlspecialchars($maskota['izen_abizen']); ?></b></a>
+                        </p>
+                    </div> 
+
+                </div>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </div>
     </main>
 </body>
 </html>

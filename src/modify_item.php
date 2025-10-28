@@ -55,7 +55,7 @@ if (!$item_id) {
 
 // Maskotaren datuak kargatu eta jabea egiaztatu
 try {
-    $sql_fetch = "SELECT maskotaren_izena, espeziea, arraza, adina, sexua, deskribapena 
+    $sql_fetch = "SELECT maskotaren_izena, espeziea, arraza, adina, sexua, deskribapena, irudia 
                   FROM maskotak 
                   WHERE id = ? AND jabea_id = ?";
     $stmt_fetch = $pdo->prepare($sql_fetch);
@@ -85,6 +85,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $sexua = htmlspecialchars(trim($_POST['sexua'] ?? ''));
     $deskribapena = htmlspecialchars(trim($_POST['deskribapena'] ?? ''));
 
+    $irudia_datuak = null;
+    $irudia_kudeatu = false;
+
+    if (isset($_POST['ezabatu_irudia']) && $_POST['ezabatu_irudia'] == '1') {
+        $irudia_datuak = null;
+        $irudia_kudeatu = true;
+        
+    } elseif (isset($_FILES['irudia_berria']) && $_FILES['irudia_berria']['error'] === UPLOAD_ERR_OK) {   
+        $irudia_datuak = file_get_contents($_FILES['irudia_berria']['tmp_name']);
+        $irudia_kudeatu = true;
+    }
+
     if (empty($izena) || empty($espeziea) || empty($sexua)) {
         $error_message = "Mascota (izena, espeziea, sexua) eremuak bete behar dira.";
     } else {
@@ -109,6 +121,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $item_id,
                 $user_id
             ]);
+
+            if ($irudia_kudeatu) {
+                
+                $sql_img_update = "UPDATE maskotak SET irudia = ? WHERE id = ? AND jabea_id = ?";
+                $stmt_img = $pdo->prepare($sql_img_update);
+                
+                $stmt_img->bindParam(1, $irudia_datuak, PDO::PARAM_LOB); 
+                $stmt_img->bindParam(2, $item_id, PDO::PARAM_INT);
+                $stmt_img->bindParam(3, $user_id, PDO::PARAM_INT);
+                $stmt_img->execute();
+            }
             
             $success_message = "Maskota arrakastaz aldatu da!";
             // Berriro kargatu datuak eguneratuta
@@ -134,22 +157,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Maskota Aldatu</title>
-    <link rel="stylesheet" href="assets/styleHas.css">
+    <link rel="stylesheet" href="assets/styleModifikazioa.css">
 </head> 
 <body>
 
-    <h1>Maskota Aldatu: <?php echo htmlspecialchars($maskota_datuak['maskotaren_izena'] ?? 'Ezezaguna'); ?></h1>
     <p><a href="/items.php">Maskoten Zerrendara Itzuli</a></p>
-
+    
     <?php if (!empty($error_message)): ?>
         <p style="color: red; border: 1px solid red; padding: 10px;"><?php echo htmlspecialchars($error_message); ?></p>
-    <?php endif; ?>
-
-    <?php if (!empty($success_message)): ?>
-        <p style="color: green; border: 1px solid green; padding: 10px;"><?php echo htmlspecialchars($success_message); ?></p>
-    <?php endif; ?>
-
+        <?php endif; ?>
+        
+        <?php if (!empty($success_message)): ?>
+            <p style="color: green; border: 1px solid green; padding: 10px;"><?php echo htmlspecialchars($success_message); ?></p>
+        <?php endif; ?>
+            
     <form id="modify_item_form" method="POST" action="/modify_item.php?id=<?php echo $item_id; ?>" enctype="multipart/form-data"> 
+        <h1>Maskota Aldatu: <?php echo htmlspecialchars($maskota_datuak['maskotaren_izena'] ?? 'Ezezaguna'); ?></h1>
         
         <input type="hidden" name="id" value="<?php echo $item_id; ?>">
 
@@ -185,6 +208,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <label for="deskribapena">Deskribapena:</label>
             <textarea id="deskribapena" name="deskribapena"><?php echo htmlspecialchars($maskota_datuak['deskribapena'] ?? ''); ?></textarea>
         </div>
+        
+    <fieldset>
+        <?php if (!empty($maskota_datuak['irudia'])): ?>
+            <div class="maskota-irudia">
+                <?php
+                    // Codificar los datos binarios (BLOB) a Base64
+                    $imgData = base64_encode($maskota_datuak['irudia']);
+                    
+                    // NOTA: Asumimos 'image/jpeg' o el tipo MIME más probable.
+                    // Si guardaste el tipo MIME en la DB (columna 'mota_mime'), úsalo aquí.
+                    $src = 'data:image/jpeg;base64,' . $imgData;
+                ?>
+                <img src="<?php echo $src; ?>" alt="Maskotaren irudi aktuala" style="max-width: 100%; height: auto; display: block; margin: 10px auto; border-radius: 4px;">
+            </div>
+        <?php endif; ?>
+            <legend>Irudiaren kudeaketa</legend>
+            
+            <?php if (isset($maskota_datuak['irudia']) && !empty($maskota_datuak['irudia'])): ?>
+                <div>
+                    <input type="checkbox" id="ezabatu_irudia" name="ezabatu_irudia" value="1">
+                    <label for="ezabatu_irudia">Uneko irudia ezabatu</label>
+                </div>
+            <?php endif; ?>
+
+            <div>
+                <label for="irudia_berria">Irudi berria kargatu (JPG):</label>
+                <input type="file" id="irudia_berria" name="irudia_berria" accept="image/*">
+                <p style="font-size: 0.8em; color: #555;">Kargatu irudi berria edo markatu "Ezabatu" aurrekoa kentzeko.</p>
+            </div>
+        </fieldset>
 
         <button type="submit">Aldaketak Gorde</button>
     </form>
