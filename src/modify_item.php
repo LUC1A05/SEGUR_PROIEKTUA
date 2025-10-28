@@ -187,7 +187,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                    value="<?php echo htmlspecialchars($maskota_datuak['espeziea'] ?? ''); ?>">
         </div>
         <div>
-            <label for="arraza">Arraza (Hautazkoa):</label>
+            <label for="arraza">Arraza (Aukerazkoa):</label>
             <input type="text" id="arraza" name="arraza"
                    value="<?php echo htmlspecialchars($maskota_datuak['arraza'] ?? ''); ?>">
         </div>
