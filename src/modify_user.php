@@ -97,7 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Pasahitza prozesatu, ematen bada
             if (!empty($pasahitza_berria)) {
-                $hashed_password = password_hash($pasahitza_berria, PASSWORD_DEFAULT);
+                $hashed_password = MD5($pasahitza_berria);
                 $set_parts[] = "pasahitza = ?"; $params[] = $hashed_password;
             }
 
