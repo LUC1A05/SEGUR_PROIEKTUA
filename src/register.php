@@ -28,45 +28,54 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = filter_var(trim($_POST['email'] ?? ''), FILTER_SANITIZE_EMAIL);
     $erabiltzaileIzena = htmlspecialchars(trim($_POST['erabiltzaile_izena'] ?? ''));
     $pasahitza = $_POST['pasahitza'] ?? '';
-    
-      if (empty($izenAbizen) || empty($nan) || empty($email) || empty($pasahitza)) {
-            $error_message = "Eremu gutziak bete behar dira.";
-        } else {
-            $hashedPassword = md5($pasahitza); // o password_hash si quieres más seguridad
-    
-            try {
-                $pdo = new PDO($dsn, $user, $pass, $options);
-    
-                $sql = "INSERT INTO erabiltzaileak 
-                        (izen_abizen, nan, telefonoa, jaiotze_data, email, erabiltzaile_izena, pasahitza)
-                        VALUES (?, ?, ?, ?, ?, ?, ?)";
-                $stmt = $pdo->prepare($sql);
-                $stmt->execute([
-                    $izenAbizen, 
-                    $nan, 
-                    $telefonoa, 
-                    $jaiotzeData, 
-                    $email, 
-                    $erabiltzaileIzena, 
-                    $hashedPassword
-                ]);
-        
-        $_SESSION['user_id'] = $pdo->lastInsertId();
-        $_SESSION['user_name'] = $izenAbizen;
-        
-        unset($_SESSION['error_message']);
-        unset($_SESSION['form_data']); 
 
-        header('Location: index.php');
-        exit;
-    } catch (PDOException $e) {
-        if ($e->getCode() === '23000') {
-            $error_message = "Errorea: NAN, email edo erabiltzaile izena dagoeneko erregistratuta dago.";
-        } else {
-            $error_message = "Errorea datu-basean: " . $e->getMessage();
+    if (empty($izenAbizen) || empty($nan) || empty($email) || empty($pasahitza)) {
+        $error_message = "Eremu gutziak bete behar dira.";
+    } elseif (!preg_match("/^[a-zA-ZÀ-ÿ\s]+$/u", $izenAbizen)) {
+        $error_message = "Izen-abizenak ez dira baliozkoak. Letra bakarrik eta espazioak onartzen dira.";
+    } elseif (!preg_match("/^\d{8}-[A-Z]$/", strtoupper($nan))) {
+        $error_message = "NAN ez da baliozkoa. Formatoa: 12345678-Z";
+    } elseif (!preg_match("/^\d{9}$/", $telefonoa)) {
+        $error_message = "Telefonoa ez da baliozkoa. 9 digitu behar ditu.";
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $error_message = "Email ez da baliozkoa.";
+    }
+
+    if (empty($error_message)) {
+        try {
+            $pdo = new PDO($dsn, $user, $pass, $options);
+
+            $hashedPassword = md5($pasahitza); // o password_hash
+            $sql = "INSERT INTO erabiltzaileak 
+                    (izen_abizen, nan, telefonoa, jaiotze_data, email, erabiltzaile_izena, pasahitza)
+                    VALUES (?, ?, ?, ?, ?, ?, ?)";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([
+                $izenAbizen, 
+                $nan, 
+                $telefonoa, 
+                $jaiotzeData, 
+                $email, 
+                $erabiltzaileIzena, 
+                $hashedPassword
+            ]);
+
+            $_SESSION['user_id'] = $pdo->lastInsertId();
+            $_SESSION['user_name'] = $izenAbizen;
+
+            unset($_SESSION['error_message']);
+            unset($_SESSION['form_data']); 
+
+            header('Location: index.php');
+            exit;
+        } catch (PDOException $e) {
+            if ($e->getCode() === '23000') {
+                $error_message = "Errorea: NAN, email edo erabiltzaile izena dagoeneko erregistratuta dago.";
+            } else {
+                $error_message = "Errorea datu-basean: " . $e->getMessage();
+            }
         }
     }
-}
 }
 ?>
 
@@ -79,32 +88,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="assets/styleHas.css">
 </head> 
 <body>
-    
+
+    <?php if (!empty($error_message)): ?>
+        <p style="color: red; border: 1px solid red; padding: 10px;"><?php echo htmlspecialchars($error_message); ?></p>
+    <?php endif; ?>
+
     <form id="register_form" method="POST" action="register.php">
         <h1>Erabiltzailearen erregistroa</h1>   
 
         <div><label for="izen_abizen">Izen Abizenak</label>
-            <input type="text" id="izen_abizen" name="izen_abizen" required placeholder="Juan Perez">
+            <input type="text" id="izen_abizen" name="izen_abizen" required placeholder="Juan Perez" value="<?php echo htmlspecialchars($_SESSION['form_data']['izen_abizen'] ?? ''); ?>">
         </div>
 
         <div><label for="nan">NAN</label>
-            <input type="text" id="nan" name="nan" required placeholder="11111111-Z">
+            <input type="text" id="nan" name="nan" required placeholder="11111111-Z" value="<?php echo htmlspecialchars($_SESSION['form_data']['nan'] ?? ''); ?>">
         </div>
 
         <div><label for="telefonoa">Telefonoa</label>
-            <input type="tel" id="telefonoa" name="telefonoa" required placeholder="999999999">
+            <input type="tel" id="telefonoa" name="telefonoa" required placeholder="999999999" value="<?php echo htmlspecialchars($_SESSION['form_data']['telefonoa'] ?? ''); ?>">
         </div>
 
         <div><label for="jaiotze_data">Jaiotze Data</label>
-            <input type="text" id="jaiotze_data" name="jaiotze_data" required placeholder="YYYY-MM-DD">
+            <input type="text" id="jaiotze_data" name="jaiotze_data" required placeholder="YYYY-MM-DD" value="<?php echo htmlspecialchars($_SESSION['form_data']['jaiotze_data'] ?? ''); ?>">
         </div>
 
         <div><label for="email">Emaila</label>
-            <input type="email" id="email" name="email" required placeholder="email@adibidea.com">
+            <input type="email" id="email" name="email" required placeholder="email@adibidea.com" value="<?php echo htmlspecialchars($_SESSION['form_data']['email'] ?? ''); ?>">
         </div>
 
         <div><label for="erabiltzaile_izena">Erabiltzaile Izena</label>
-            <input type="text" id="erabiltzaile_izena" name="erabiltzaile_izena" required placeholder="username123">
+            <input type="text" id="erabiltzaile_izena" name="erabiltzaile_izena" required placeholder="username123" value="<?php echo htmlspecialchars($_SESSION['form_data']['erabiltzaile_izena'] ?? ''); ?>">
         </div>
 
         <div><label for="pasahitza">Pasahitza</label>
@@ -115,6 +128,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </form>
 
     <p id="login_link">Baduzu jada kontu bat? <a href="login.php">Saioa hasi hemen</a></p>
-    <script src="assets/validation.js"></script>
 </body>
 </html>
