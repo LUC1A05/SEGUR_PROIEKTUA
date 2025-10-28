@@ -80,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $params = [];
 
         // --- 3.1. Balidatu (Email eta Username) ---
-        $sql_check = "SELECT id FROM usuarios WHERE (email = ? OR erabiltzaile_izena = ?) AND id != ?";
+        $sql_check = "SELECT id FROM erabiltzaileak WHERE (email = ? OR erabiltzaile_izena = ?) AND id != ?";
         $stmt_check = $pdo->prepare($sql_check);
         $stmt_check->execute([$email, $erabiltzaile_izena, $user_id]);
         
@@ -102,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             // --- 3.3. Update-a exekutatu ---
-            $sql_update = "UPDATE usuarios SET " . implode(', ', $set_parts) . " WHERE id = ?";
+            $sql_update = "UPDATE erabiltzaileak SET " . implode(', ', $set_parts) . " WHERE id = ?";
             $params[] = $user_id; // Añadir el ID al final
 
             try {
