@@ -177,7 +177,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <input type="hidden" name="id" value="<?php echo $item_id; ?>">
 
         <div>
-            <label for="maskotaren_izena">Mascota Izena:</label>
+            <label for="maskotaren_izena">Maskota Izena:</label>
             <input type="text" id="maskotaren_izena" name="maskotaren_izena" required 
                    value="<?php echo htmlspecialchars($maskota_datuak['maskotaren_izena'] ?? ''); ?>">
         </div>
@@ -187,7 +187,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                    value="<?php echo htmlspecialchars($maskota_datuak['espeziea'] ?? ''); ?>">
         </div>
         <div>
-            <label for="arraza">Arraza (Opcional):</label>
+            <label for="arraza">Arraza (Hautazkoa):</label>
             <input type="text" id="arraza" name="arraza"
                    value="<?php echo htmlspecialchars($maskota_datuak['arraza'] ?? ''); ?>">
         </div>
@@ -200,8 +200,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <label for="sexua">Sexua:</label>
             <select id="sexua" name="sexua" required>
                 <option value="">Aukeratu...</option>
-                <option value="Arra" <?php echo ($maskota_datuak['sexua'] ?? '') == 'Arra' ? 'selected' : ''; ?>>Arra (Macho)</option>
-                <option value="Emea" <?php echo ($maskota_datuak['sexua'] ?? '') == 'Emea' ? 'selected' : ''; ?>>Emea (Hembra)</option>
+                <option value="Arra" <?php echo ($maskota_datuak['sexua'] ?? '') == 'Arra' ? 'selected' : ''; ?>>Arra</option>
+                <option value="Emea" <?php echo ($maskota_datuak['sexua'] ?? '') == 'Emea' ? 'selected' : ''; ?>>Emea</option>
             </select>
         </div>
         <div>
