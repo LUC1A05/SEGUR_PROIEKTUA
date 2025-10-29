@@ -16,6 +16,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const erabilgarri = await egiaztatuErabiltzaileIzena();
         if (!erabilgarri) baliozko = false;
+        const nanErabilgarri = await egiaztatuNAN();
+        if (!nanErabilgarri) baliozko = false;
         
         if (!baliozko) {
             event.preventDefault();
@@ -132,6 +134,32 @@ document.addEventListener('DOMContentLoaded', function() {
             return true;
         } catch (e) {
             erakutsiErrorea('erabiltzaile_izena_errorea', 'Errorea zerbitzariarekin konektatzean.');
+            return false;
+        }
+    }
+
+    async function egiaztatuNAN() {
+        const sarrera = document.getElementById('nan');
+        const nan = sarrera.value.trim();
+
+        if (nan === '') {
+            erakutsiErrorea('nan_errorea', 'NAN ezin da hutsik egon.');
+            return false;
+        }
+
+        try {
+            const erantzuna = await fetch(`assets/checkNAN.php?nan=${encodeURIComponent(nan)}`);
+            const data = await erantzuna.json();
+
+            if (!data.available){
+                erakutsiErrorea('nan_errorea', 'NAN erregistratuta dago.');
+                return false;
+            }
+
+            errorea.textContent = '';
+            return true;
+        } catch (e) {
+            erakutsiErrorea('nan_errorea', 'Errorea zerbitzariarekin konektatzean.');
             return false;
         }
     }
