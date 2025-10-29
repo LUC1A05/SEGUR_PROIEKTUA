@@ -16,7 +16,7 @@ $options = [
     PDO::ATTR_EMULATE_PREPARES   => false,
 ];
 
-$nan = $_GET['erabiltzaile_izena'] ?? '';
+$nan = $_GET['nan'] ?? '';
 $response = ['available' => false];
 $pdo = null;
 
