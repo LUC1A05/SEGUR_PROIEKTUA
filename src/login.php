@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['user_name'] = $user['izen_abizen']; // Izena eta abizena, ongi etorriko mezuetarako erabilgarria
 
                 // Hasierara bideratu
-                header('Location: index.php');
+                header('Location: /');
                 exit;
             } else {
                 // 3. Autentifikazioan errorea

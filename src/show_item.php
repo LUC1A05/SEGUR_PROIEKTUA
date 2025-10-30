@@ -43,7 +43,7 @@ try {
 </head>
 <body>
     <header class="header">
-        <p><a href="/index.php">Hasiera</a></p>
+        <p><a href="/">Hasiera</a></p>
     </header>
     <div class="fitxa">
         <h1>Maskotaren Xehetasunak: <br><?php echo htmlspecialchars($maskota['maskotaren_izena']); ?></h1>

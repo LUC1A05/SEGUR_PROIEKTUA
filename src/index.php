@@ -52,7 +52,7 @@ try {
         </div>
         <nav class="header_nav">
             <ul class="header_nav-list">
-                <li class="header_nav-item"><a href="index.php"> Hasiera</a></li>
+                <li class="header_nav-item"><a href="/"> Hasiera</a></li>
 
                 <?php if ($is_logged_in): ?>
                     <li class="header_nav-item"><a href="items.php"> Nire animaliak</a></li>
