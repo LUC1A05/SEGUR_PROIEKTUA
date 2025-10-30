@@ -32,6 +32,7 @@ try {
 <head>
     <meta charset="UTF-8">
     <title>Erabiltzailearen informazioa</title>
+    <link rel="icon" type="image/png" href="images/button.png">
     <link rel="stylesheet" href="assets/styleShow.css">
 </head>
 <body>
