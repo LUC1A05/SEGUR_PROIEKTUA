@@ -4,13 +4,13 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 session_start();
 
-// logeatuta ez badago, login-era bideratu
+// Saioa hasita ez badago, login-era bideratu
 if (!isset($_SESSION['user_id'])) {
     header('Location: /login.php');
     exit;
 }
 
-// --- datu basearen konfigurazioa (PDO) ---
+// --- datu basearen konfigurazioa ---
 $host = 'db';
 $db   = 'database';
 $user = 'admin'; 
@@ -27,7 +27,7 @@ $options = [
 $user_id = $_SESSION['user_id'];
 $item_id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
-// 1. id baliozko bat jaso dela berifikatu
+// 1. Baliozko id bat jaso dela egiaztatu
 if (!$item_id) {
     $_SESSION['error_message'] = "Ez da maskota ID baliozko bat jaso.";
     header('Location: /items.php');
@@ -37,7 +37,7 @@ if (!$item_id) {
 try {
     $pdo = new PDO($dsn, $user, $pass, $options);
 
-    // 2. Ezabatzeko exekutatu, PROPIETARIOA BATZUKO DENEAN
+    // 2. Ezabatzeko exekutatu
     $sql = "DELETE FROM maskotak WHERE id = ? AND jabea_id = ?";
     
     $stmt = $pdo->prepare($sql);
@@ -51,7 +51,7 @@ try {
     }
     
 } catch (PDOException $e) {
-    $_SESSION['error_message'] = "Errorea datu-basean ezabatzean.";
+    $_SESSION['error_message'] = "Errorea datu basean ezabatzean.";
 }
 
 // 4. Beti item-en zerrendara birbideratu
