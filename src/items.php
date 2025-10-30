@@ -4,7 +4,7 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 session_start();
 
-// logeatuta ez badago, login-era bideratu
+// Saioa hasita ez badago, login-era bideratu
 if (!isset($_SESSION['user_id'])) {
     $_SESSION['error_message'] = "Saioa hasi behar duzu zure maskotak ikusteko.";
     header('Location: /login.php');
@@ -31,7 +31,7 @@ $user_id = $_SESSION['user_id'];
 try {
     $pdo = new PDO($dsn, $user, $pass, $options);
     
-    // 1. Maskoten lista atzitu
+    // 1. Maskoten zerrenda atzitu
     $sql_list = "SELECT id, maskotaren_izena, espeziea, arraza, adina, sexua, deskribapena, irudia 
                  FROM maskotak 
                  WHERE jabea_id = ?";
@@ -41,7 +41,7 @@ try {
     $maskotak = $stmt_list->fetchAll();
     
 } catch (PDOException $e) {
-    $error_message = "Errorea datu-basean: Ezin izan dira maskotak kargatu.";
+    $error_message = "Errorea datu basean: Ezin izan dira maskotak kargatu.";
 }
 ?>
 
@@ -57,7 +57,7 @@ try {
 <body>
     <header class="header">
         <p><a href="/">Hasiera</a></p>
-        <p><a href="/add_item.php">+ Maskota Berria Erregistratu</a></p>
+        <p><a href="/add_item.php">+ Maskota Berria Adoptatu</a></p>
     </header>
     
     <?php if (!empty($error_message)): ?>
@@ -67,7 +67,7 @@ try {
     <div class="maskota-zerrenda">
         <h1>Nire Maskotak</h1>
         <?php if (empty($maskotak)): ?>
-            <p>Oraindik ez duzu maskotarik erregistratu. Gehitu bat goiko estekatik.</p>
+            <p>Oraindik ez duzu maskotarik adoptatu. Gehitu bat goiko estekatik.</p>
         <?php else: ?>
             <?php foreach ($maskotak as $maskota): ?>
                 <div class="maskota-txartela">
