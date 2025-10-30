@@ -206,8 +206,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <label for="sexua">Sexua:</label>
             <select id="sexua" name="sexua" required>
                 <option value="">Aukeratu...</option>
-                <option value="Arra" <?php echo ($maskota_datuak['sexua'] ?? '') == 'Arra' ? 'selected' : ''; ?>>Arra (Macho)</option>
-                <option value="Emea" <?php echo ($maskota_datuak['sexua'] ?? '') == 'Emea' ? 'selected' : ''; ?>>Emea (Hembra)</option>
+                <option value="Arra" <?php echo ($maskota_datuak['sexua'] ?? '') == 'Arra' ? 'selected' : ''; ?>>Arra</option>
+                <option value="Emea" <?php echo ($maskota_datuak['sexua'] ?? '') == 'Emea' ? 'selected' : ''; ?>>Emea</option>
             </select>
         </div>
         <div>
