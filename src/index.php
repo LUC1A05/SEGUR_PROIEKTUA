@@ -55,9 +55,9 @@ try {
                 <li class="header_nav-item"><a href="/"> Hasiera</a></li>
 
                 <?php if ($is_logged_in): ?>
-                    <li class="header_nav-item"><a href="items.php"> Nire animaliak</a></li>
-                    <li class="header_nav-item"><a href="add_item.php"> Animali bat adoptatu</a></li>
-                    <li class="header_nav-item"><a href="modify_user.php"> Nire Datuak aldatu</a></li>
+                    <li class="header_nav-item"><a href="items.php"> Nire maskotak</a></li>
+                    <li class="header_nav-item"><a href="add_item.php"> Maskota bat adoptatu</a></li>
+                    <li class="header_nav-item"><a href="modify_user.php"> Nire datuak aldatu</a></li>
                 <?php else: ?>
                     <li class="header_nav-item"><a href="login.php"> Saioa hasi</a></li>
                     <li class="header_nav-item"><a href="register.php"> Erregistratu</a></li>
@@ -69,11 +69,10 @@ try {
     <main class="profile">
         <div class="profile_wrapper">
             <div class="image_container">
-                <!--emen nahi duguna jarri-->
                 <h1 id="welcome">Ongi Etorri Web Sistemara</h1>
                 <?php if ($is_logged_in): ?>
                     <p>
-                        Kaixo, <b><?php echo htmlspecialchars($username); ?></b>! Hasi zure animaliak kudeatzen goiko menua erabiliz.
+                        Kaixo, <b><?php echo htmlspecialchars($username); ?></b>! Hasi zure maskotak kudeatzen goiko menua erabiliz.
                     </p>
                 <?php else: ?>
                     <p>
@@ -100,7 +99,7 @@ try {
                         <div class="maskota-irudia">
                             <?php
                                 $imgData = base64_encode($maskota['irudia']);
-                                $src = 'data:image/jpeg;base64,' . $imgData; // Usar el tipo MIME si lo guardaste
+                                $src = 'data:image/jpeg;base64,' . $imgData; 
                             ?>
                             <img src="<?php echo $src; ?>" alt="Irudia: <?php echo htmlspecialchars($maskota['maskotaren_izena']); ?>">
                         </div>
