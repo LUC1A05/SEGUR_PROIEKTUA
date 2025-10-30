@@ -31,28 +31,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         try {
             $pdo = new PDO($dsn, $user, $pass, $options);
             
-            // 1. Erabiltzailea bilatu
+        // 1. Erabiltzailea bilatu
             $sql = "SELECT id, erabiltzaile_izena, pasahitza, izen_abizen FROM erabiltzaileak WHERE erabiltzaile_izena = ?";
             $stmt = $pdo->prepare($sql);
             $stmt->execute([$erabiltzaileIzena]);
             $user = $stmt->fetch();
             
             if ($user && md5($pasahitza) === $user['pasahitza']) {
-                // 2. Autentifikazioa arrakastatsua
+                
+        // 2. Autentifikazioa arrakastatsua
+                
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['username'] = $user['erabiltzaile_izena'];
                 $_SESSION['user_name'] = $user['izen_abizen']; // Izena eta abizena, ongi etorriko mezuetarako erabilgarria
 
-                // Hasierara bideratu
+        // Hasierara birbideratu
                 header('Location: /');
                 exit;
             } else {
                 // 3. Autentifikazioan errorea
-                $error_message = "Erabiltzaile izena edo pasahitza okerrak.";
+                $error_message = "Erabiltzaile izena edo pasahitza okerrak dira.";
             }
             
         } catch (PDOException $e) {
-            $error_message = "Errorea datu-basean: Ezin izan da saioa hasi.";
+            $error_message = "Errorea datu basean: Ezin izan da saioa hasi.";
         }
     }
 }
