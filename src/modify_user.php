@@ -137,6 +137,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nire Profila Aldatu</title>
+    <link rel="icon" type="image/png" href="images/button.png">
     <link rel="stylesheet" href="assets/styleModifikazioa.css">
 </head> 
 <body>
