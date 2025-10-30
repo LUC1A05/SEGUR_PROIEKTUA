@@ -24,14 +24,14 @@
    ```bash
    docker-compose up -d
    ```
-7. Kontainerrak martxan daudela egiaztatu
+6. Kontainerrak martxan daudela egiaztatu
    ```bash
    docker ps
    ```
-9. Datu basea inportatu:
-  1. localhost:8890 atzitu
-  2. Sesioa hasi:
+7. Datu basea inportatu:
+  - localhost:8890 atzitu
+  - Sesioa hasi:
      user: admin
      pass:test
-  3. databese atzitu
-  4. database.sql fitxategia inportatu
+  - databese atzitu
+  - database.sql fitxategia inportatu
