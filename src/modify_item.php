@@ -4,14 +4,17 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 session_start();
 
+// ---------------------------------------------
 // 1. Sesioa egiaztatu
+// ---------------------------------------------
+
 if (!isset($_SESSION['user_id'])) {
-    $_SESSION['error_message'] = "Saioa hasi behar duzu zure maskotak aldatzeko.";
+    $_SESSION['error_message'] = "Saioa hasi behar duzu zure maskoten infomrazioa aldatzeko.";
     header('Location: /login.php');
     exit;
 }
 
-// --- datu basearen konfigurazioa (PDO) ---
+// --- datu basearen konfigurazioa ---
 $host = 'db';
 $db   = 'database';
 $user = 'admin'; 
@@ -41,12 +44,12 @@ try {
 // ---------------------------------------------
 $item_id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
-// POST bidezko eskaera bada, id-a lortu
+// POST bidezko eskaerarekin, id-a lortu
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $item_id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
 }
 
-// 1. id baliozko bat jaso dela berifikatu
+// 1. id baliozko bat jaso dela egiaztatu
 if (!$item_id) {
     $_SESSION['error_message'] = "Ez da maskota ID baliozko bat jaso.";
     header('Location: /items.php');
@@ -180,7 +183,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <input type="hidden" name="id" value="<?php echo $item_id; ?>">
 
         <div>
-            <label for="maskotaren_izena">Mascota Izena:</label>
+            <label for="maskotaren_izena">Maskota Izena:</label>
             <input type="text" id="maskotaren_izena" name="maskotaren_izena" required 
                    value="<?php echo htmlspecialchars($maskota_datuak['maskotaren_izena'] ?? ''); ?>">
         </div>
@@ -190,7 +193,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                    value="<?php echo htmlspecialchars($maskota_datuak['espeziea'] ?? ''); ?>">
         </div>
         <div>
-            <label for="arraza">Arraza (Opcional):</label>
+            <label for="arraza">Arraza (Aukerazkoa):</label>
             <input type="text" id="arraza" name="arraza"
                    value="<?php echo htmlspecialchars($maskota_datuak['arraza'] ?? ''); ?>">
         </div>
@@ -216,14 +219,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php if (!empty($maskota_datuak['irudia'])): ?>
             <div class="maskota-irudia">
                 <?php
-                    // Codificar los datos binarios (BLOB) a Base64
                     $imgData = base64_encode($maskota_datuak['irudia']);
-                    
-                    // NOTA: Asumimos 'image/jpeg' o el tipo MIME más probable.
-                    // Si guardaste el tipo MIME en la DB (columna 'mota_mime'), úsalo aquí.
                     $src = 'data:image/jpeg;base64,' . $imgData;
                 ?>
-                <img src="<?php echo $src; ?>" alt="Maskotaren irudi aktuala" style="max-width: 100%; height: auto; display: block; margin: 10px auto; border-radius: 4px;">
+                <img src="<?php echo $src; ?>" alt="Maskotaren uneko irudia" style="max-width: 100%; height: auto; display: block; margin: 10px auto; border-radius: 4px;">
             </div>
         <?php endif; ?>
             <legend>Irudiaren kudeaketa</legend>
@@ -236,7 +235,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php endif; ?>
 
             <div>
-                <label for="irudia_berria">Irudi berria kargatu (JPG):</label>
+                <label for="irudia_berria">Irudi berria kargatu (.jpg):</label>
                 <input type="file" id="irudia_berria" name="irudia_berria" accept="image/*">
                 <p>Kargatu irudi berria edo markatu "Ezabatu" aurrekoa kentzeko.</p>
             </div>
