@@ -51,6 +51,7 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nire Maskotak</title>
+    <link rel="icon" type="image/png" href="images/button.png">
     <link rel="stylesheet" href="assets/styleItems.css">
     
 </head> 
