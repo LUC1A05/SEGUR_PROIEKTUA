@@ -4,13 +4,13 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 session_start();
 
-// logeatuta ez badago, login-era bideratu
+// Saioa hasita ez badago, login-era bideratu
 if (!isset($_SESSION['user_id'])) {
     header('Location: /login.php');
     exit;
 }
 
-// --- datu basearen konfigurazioa (PDO) ---
+// --- datu basearen konfigurazioa ---
 $host = 'db';
 $db   = 'database';
 $user = 'admin'; 
@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }  
 
     if (empty($izena) || empty($espeziea) || empty($sexua)) {
-        $error_message = "Maskota (izena, espeziea, sexua) eremuak bete behar dira.";
+        $error_message = "Maskotaren izena, espeziea eta sexua bete behar dira.";
     } else {
         try {
             $sql = "INSERT INTO maskotak (maskotaren_izena, espeziea, arraza, adina, sexua, deskribapena, jabea_id, irudia) 
