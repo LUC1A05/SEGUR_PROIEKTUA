@@ -34,4 +34,4 @@
      user: admin
      pass:test
   - databese atzitu
-  - database.sql fitxategia inportatu
+  - init.sql fitxategia inportatu
