@@ -4,14 +4,16 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 session_start();
 
-// 1. Sesioa egiaztatu
+// ---------------------------------------------
+// 1. Saioa hasi dela egiaztatu
+// ---------------------------------------------
 if (!isset($_SESSION['user_id'])) {
     $_SESSION['error_message'] = "Saioa hasi behar duzu zure profila aldatzeko.";
     header('Location: /login.php');
     exit;
 }
 
-// --- datu basearen konfigurazioa (PDO) ---
+// --- datu basearen konfigurazioa ---
 $host = 'db';
 $db   = 'database';
 $user = 'admin'; 
@@ -37,7 +39,7 @@ try {
 }
 
 // ---------------------------------------------
-// 2. Kargatu Erabiltzailearen Datuak
+// 2. Erabiltzailearen Datuak Kargatu
 // ---------------------------------------------
 try {
     $sql_fetch = "SELECT izen_abizen, nan, telefonoa, jaiotze_data, email, erabiltzaile_izena 
@@ -54,11 +56,11 @@ try {
     }
 
 } catch (PDOException $e) {
-    $error_message = "Errorea datuak kargatzean.";
+    $error_message = "Errorea datuak kargatzerakoan.";
 }
 
 // ---------------------------------------------
-// 3. Prozesatu Aldaketa (POST)
+// 3. Prozesatu Aldaketa 
 // ---------------------------------------------
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
@@ -69,11 +71,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = htmlspecialchars(trim($_POST['email'] ?? ''));
     $erabiltzaile_izena = htmlspecialchars(trim($_POST['erabiltzaile_izena'] ?? ''));
     $pasahitza_berria = $_POST['pasahitza_berria'] ?? '';
-    $pasahitza_konfirm = $_POST['pasahitza_konfirm'] ?? '';
+    $pasahitza_konfirmatu = $_POST['pasahitza_konfirmatu'] ?? '';
 
     if (empty($izen_abizen) || empty($nan) || empty($email) || empty($erabiltzaile_izena)) {
-        $error_message = "Izen-abizenak, NANa, E-maila eta Erabiltzaile izena derrigorrezkoak dira.";
-    } elseif ($pasahitza_berria != $pasahitza_konfirm) {
+        $error_message = "Izen-abizenak, NANa, e-maila eta erabiltzaile izena derrigorrezkoak dira.";
+    } elseif ($pasahitza_berria != $pasahitza_konfirmatu) {
         $error_message = "Pasahitz berriak ez datoz bat.";
     } else {
         $set_parts = [];
@@ -191,8 +193,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <input type="password" id="pasahitza_berria" name="pasahitza_berria" placeholder="****">
         </div>
         <div>
-            <label for="pasahitza_konfirm">Pasahitz Berria Konfirm: </label>
-            <input type="password" id="pasahitza_konfirm" name="pasahitza_konfirm" placeholder="****">
+            <label for="pasahitza_konfirmatu">Pasahitz Berria Konfirmatu: </label>
+            <input type="password" id="pasahitza_konfirmatu" name="pasahitza_konfirmatu" placeholder="****">
         </div>
 
         <button type="submit">Aldaketak Gorde</button>
