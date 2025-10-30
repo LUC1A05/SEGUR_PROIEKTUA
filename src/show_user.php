@@ -35,12 +35,8 @@ try {
     <link rel="stylesheet" href="assets/styleShow.css">
 </head>
 <body>
-    <header class="navigation">
-        <nav class="header_nav">
-            <ul class="header_nav_list">
-                <li class="header_nav_item"><a href="/">Hasiera</a></li>
-            </ul>
-        </nav>
+    <header class="header">
+        <p><a href="/">Hasiera</a></p>
     </header>
 
     <div class="fitxa">

@@ -88,8 +88,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="assets/styleModifikazioa.css">
 </head> 
 <body>
-
-    <p><a href="/items.php">Maskoten Zerrendara Itzuli</a></p>
+    <header class="header">
+        <p><a href="/items.php">Maskoten Zerrenda</a></p>
+    </header>
     
     <?php if (!empty($error_message)): ?>
         <p style="color: red; border: 1px solid red; padding: 10px;"><?php echo htmlspecialchars($error_message); ?></p>

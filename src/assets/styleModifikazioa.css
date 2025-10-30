@@ -15,6 +15,35 @@ div, ul, nav, header, footer, a, li, label {
     margin: 0;
 }
 
+/*------------HEADER--------------*/
+.header {
+    background-color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 0 20px #00000070;
+    animation: header-movement linear both;
+    animation-timeline: scroll();
+    animation-range: 0 100px;
+    position: sticky;
+    top: 0;
+}
+
+.header a {
+    margin: 10px 20px;
+    padding: 10px 20px;
+    color: #52e26a;
+    text-decoration: none;
+}
+
+.header a:hover {
+    color: #fff;
+    background-color: #52e26a;
+    border-radius: 5px;
+}
+/*----------Header amaiera---------*/
+
+/*------------FORM-------------*/
 h1 {
     color: #333;
     text-align: center;
@@ -24,6 +53,7 @@ h1 {
 form {
     max-width: 450px;
     margin: 0 auto;
+    margin-top: 20px;
     padding: 20px;
     background: #fff;
     border-radius: 8px;
@@ -44,7 +74,9 @@ label {
 input[type="text"],
 input[type="tel"],
 input[type="email"],
-input[type="password"] {
+input[type="password"],
+input[type="file"],
+select, textarea {
     width: 100%;
     padding: 8px;
     border: 1px solid #ccc;
@@ -98,3 +130,4 @@ button:hover {
     margin-top: 15px;
     color: #171717;
 }
+

@@ -42,9 +42,9 @@ try {
     <link rel="stylesheet" href="assets/styleShow.css">
 </head>
 <body>
-    <div class="navigation">
-        <a href="/index.php">Hasierara Itzuli</a>
-    </div>
+    <header class="header">
+        <p><a href="/index.php">Hasiera</a></p>
+    </header>
     <div class="fitxa">
         <h1>Maskotaren Xehetasunak: <br><?php echo htmlspecialchars($maskota['maskotaren_izena']); ?></h1>
         <div class="item-details">
@@ -53,7 +53,7 @@ try {
             <p><strong>Arraza:</strong> <?php echo htmlspecialchars($maskota['arraza']); ?></p>
             <p><strong>Adina:</strong> <?php echo htmlspecialchars($maskota['adina']); ?> urte</p>
             <p><strong>Sexua:</strong> <?php echo htmlspecialchars($maskota['sexua']); ?></p>
-            <p><strong>Deskribapena:</strong> <?php echo nl2br(htmlspecialchars($maskota['deskribapena'])); ?></p>
+            <p id="deskribapena"><strong>Deskribapena:</strong> <?php echo nl2br(htmlspecialchars($maskota['deskribapena'])); ?></p>
         </div>
     </div>
 </body>

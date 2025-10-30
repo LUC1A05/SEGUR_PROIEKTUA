@@ -28,6 +28,19 @@ div, ul, nav, header, footer, a, li, label {
     position: sticky;
     top: 0;
 }
+
+.header a {
+    margin: 10px 20px;
+    padding: 10px 20px;
+    color: #52e26a;
+    text-decoration: none;
+}
+
+.header a:hover {
+    color: #fff;
+    background-color: #52e26a;
+    border-radius: 5px;
+}
 /*----------Header amaiera---------*/
 
 /*----------Maskota Zerrenda---------*/

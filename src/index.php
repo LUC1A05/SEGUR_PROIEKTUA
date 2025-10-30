@@ -77,7 +77,7 @@ try {
                     </p>
                 <?php else: ?>
                     <p>
-                        Web Sistema hau erabiltzen hasteko, <b>Saioa hasi</b> edo <b>Erregistratu</b> mesedez.
+                        Web Sistema hau erabiltzen hasteko, <b><a href="login.php">Saioa hasi</a></b> edo <b><a href="register.php">Erregistratu</a></b> mesedez.
                     </p>
                 <?php endif; ?>
             </div>

@@ -120,12 +120,13 @@ div, ul, nav, header, footer, a, li, label {
 /*            Body Content               */
 /*---------------------------------------*/
 
-#welcome {
+.image_container #welcome {
     font-size: 2.2rem;
     color: #38a169;
+    margin: 0 auto;
     margin-top: 0;
     margin-bottom: 20px;
-    position: center;
+    text-align: center;
     font-weight: 700;
 }
 
@@ -133,11 +134,13 @@ div, ul, nav, header, footer, a, li, label {
     font-size: 20px;
     line-height: 1.6;
     color: #4a5568;
+    text-align: center;
 }
 
-.profile_wrapper b {
+.profile_wrapper a, b {
     color: #27794b;
     font-weight: 700;
+    text-decoration: none;
 }
 
 /*-------------PROFILE---------------*/
@@ -213,4 +216,11 @@ div, ul, nav, header, footer, a, li, label {
     height: 100%;
     object-fit: cover;
     display: block;
+}
+
+.maskota-zerrenda h2 {
+    background-color: #f9f9f99a;
+    border-radius: 12px;
+    width: 50px;
+    text-align: center;
 }
