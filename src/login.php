@@ -65,6 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
+    <link rel="icon" type="image/png" href="images/button.png">
     <link rel="stylesheet" href="assets/styleHas.css">
 </head>
 <body>
