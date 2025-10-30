@@ -143,6 +143,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'sexua' => $sexua,
                 'deskribapena' => $deskribapena
             ];
+            header('Location: items.php'); //berbideratu animalien zerrendara
+            exit;
 
         } catch (PDOException $e) {
             $error_message = "Errorea maskota aldatzean.";
@@ -177,7 +179,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <input type="hidden" name="id" value="<?php echo $item_id; ?>">
 
         <div>
-            <label for="maskotaren_izena">Maskota Izena:</label>
+            <label for="maskotaren_izena">Mascota Izena:</label>
             <input type="text" id="maskotaren_izena" name="maskotaren_izena" required 
                    value="<?php echo htmlspecialchars($maskota_datuak['maskotaren_izena'] ?? ''); ?>">
         </div>
@@ -187,7 +189,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                    value="<?php echo htmlspecialchars($maskota_datuak['espeziea'] ?? ''); ?>">
         </div>
         <div>
-            <label for="arraza">Arraza (Aukerazkoa):</label>
+            <label for="arraza">Arraza (Opcional):</label>
             <input type="text" id="arraza" name="arraza"
                    value="<?php echo htmlspecialchars($maskota_datuak['arraza'] ?? ''); ?>">
         </div>
@@ -200,8 +202,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <label for="sexua">Sexua:</label>
             <select id="sexua" name="sexua" required>
                 <option value="">Aukeratu...</option>
-                <option value="Arra" <?php echo ($maskota_datuak['sexua'] ?? '') == 'Arra' ? 'selected' : ''; ?>>Arra</option>
-                <option value="Emea" <?php echo ($maskota_datuak['sexua'] ?? '') == 'Emea' ? 'selected' : ''; ?>>Emea</option>
+                <option value="Arra" <?php echo ($maskota_datuak['sexua'] ?? '') == 'Arra' ? 'selected' : ''; ?>>Arra (Macho)</option>
+                <option value="Emea" <?php echo ($maskota_datuak['sexua'] ?? '') == 'Emea' ? 'selected' : ''; ?>>Emea (Hembra)</option>
             </select>
         </div>
         <div>
@@ -235,7 +237,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div>
                 <label for="irudia_berria">Irudi berria kargatu (JPG):</label>
                 <input type="file" id="irudia_berria" name="irudia_berria" accept="image/*">
-                <p style="font-size: 0.8em; color: #555;">Kargatu irudi berria edo markatu "Ezabatu" aurrekoa kentzeko.</p>
+                <p>Kargatu irudi berria edo markatu "Ezabatu" aurrekoa kentzeko.</p>
             </div>
         </fieldset>
 
