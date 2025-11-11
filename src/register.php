@@ -17,6 +17,10 @@ $options = [
     PDO::ATTR_EMULATE_PREPARES   => false,
 ];
 
+if (!isset($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+    die("CSRF token invalid or missing.");
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $_SESSION['error_message'] = '';
     $_SESSION['form_data'] = $_POST;
@@ -80,10 +84,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="assets/styleHas.css">
 </head> 
 <body>
+    <?php
+    if (empty($_SESSION['csrf_token'])) {
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    }
+    ?>
     
     <form id="register_form" method="POST" action="register.php">
         <h1>Erabiltzailearen erregistroa</h1>   
-
+        <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
         <?php if (!empty($error_message)): ?>
             <p style="color: red; border: 1px solid red; padding: 10px; margin-bottom: 15px;"><?php echo htmlspecialchars($error_message); ?></p>
         <?php endif; ?>

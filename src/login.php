@@ -19,6 +19,10 @@ $options = [
 
 // Aldagaiak erroreak kudeatzeko
 $error_message = '';
+if (!isset($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+    die("CSRF token invalid or missing.");
+}
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
@@ -74,9 +78,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <p style="color:red;"><?= htmlspecialchars($error_message) ?></p>
     <?php endif; ?>
 
-    
+    <?php
+    if (empty($_SESSION['csrf_token'])) {
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    }
+    ?>
+
     <form id="login_form" method="POST" action="login.php">
         <h1>Saioa hasi</h1>
+        <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
         <div>
             <label for="erabiltzaile_izena">Erabiltzaile Izena:</label>
             <input type="text" id="erabiltzaile_izena" name="erabiltzaile_izena" required placeholder="User123">
