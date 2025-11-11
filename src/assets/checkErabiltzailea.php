@@ -2,6 +2,7 @@
 ini_set('display_errors', 0); 
 ini_set('log_errors', 1);
 header('Content-Type: application/json');
+header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';");
 
 $host = 'db';
 $db   = 'database';

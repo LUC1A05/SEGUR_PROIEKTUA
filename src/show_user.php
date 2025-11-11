@@ -1,6 +1,9 @@
 <?php
 session_start();
 require_once 'config/db.php';
+header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';");
+
+
 
 // user parametroa jaso den egiaztatu
 $erabId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
