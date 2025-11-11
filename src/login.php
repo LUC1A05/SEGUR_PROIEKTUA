@@ -2,12 +2,24 @@
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 ini_set('session.cookie_httponly', 1);
-ini_set('session.cookie_secure', 1);
+ini_set('session.cookie_secure', 0);
 ini_set('session.use_only_cookies', 1);
+ini_set('session.cookie_samesite', 'Lax');
 error_reporting(E_ALL);
 session_start();
 header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';");
 
+if (isset($_COOKIE[session_name()])) {
+    setcookie(
+        session_name(),
+        session_id(),
+        0,
+        '/; samesite=Lax',
+        '',    // dominio
+        false, // secure
+        true   // httponly
+    );
+}
 
 
 $host = 'db';
