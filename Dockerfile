@@ -1,14 +1,22 @@
 FROM php:7.2.2-apache
 
-# PHP egiteko
 RUN docker-php-ext-install mysqli pdo pdo_mysql
 
-# Aplikazioa kopiatu
 COPY src/ /var/www/html/
 
-# Apacheri baimen egokiak eman
 RUN chown -R www-data:www-data /var/www/html
 
-# Rewrite egokitu
 RUN a2enmod rewrite
 
+
+RUN printf '%s\n' \
+'ServerSignature Off' \
+'ServerTokens Prod' \
+'ServerName localhost' \
+'' \
+'<IfModule mod_headers.c>' \
+'    Header always unset X-Powered-By' \
+'    Header always set X-Content-Type-Options "nosniff"' \
+'</IfModule>' \
+> /etc/apache2/conf-available/hide_server.conf \
+&& a2enconf hide_server

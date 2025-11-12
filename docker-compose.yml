@@ -1,12 +1,8 @@
-version: "3.9"
-
 services:
   web:
     build:
       context: .
       dockerfile: Dockerfile
-    ports:
-      - "81:80"
     volumes:
       - ./src:/var/www/html
     environment:
@@ -36,6 +32,15 @@ services:
     environment:
       PMA_HOST: db
       MYSQL_ROOT_PASSWORD: root
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "81:81"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - web
 
 volumes:
   db_data:
