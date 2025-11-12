@@ -1,22 +1,22 @@
 <?php
-ini_set('session.cookie_httponly', 1);
-ini_set('session.cookie_secure', 0);
-ini_set('session.use_only_cookies', 1);
-ini_set('session.cookie_samesite', 'Lax');
+header_remove('X-Powered-By');
+
+$lifetime = 0;
+$path = '/; samesite=Lax'; 
+$domain = '';
+$secure = false;   
+$httponly = true;
+
+session_set_cookie_params($lifetime, $path, $domain, $secure, $httponly);
 session_start();
-header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';");
+
 
 if (isset($_COOKIE[session_name()])) {
-    setcookie(
-        session_name(),
-        session_id(),
-        0,
-        '/; samesite=Lax',
-        '',    // dominio
-        false, // secure
-        true   // httponly
-    );
+    setcookie(session_name(), session_id(), $lifetime, $path, $domain, $secure, $httponly);
 }
+
+header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';");
+
 
 $is_logged_in = isset($_SESSION['user_id']);
 $username = $is_logged_in ? $_SESSION['user_name'] : '';
