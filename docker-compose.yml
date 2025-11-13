@@ -1,14 +1,8 @@
 services:
   web:
-<<<<<<< HEAD
     build:
       context: .
       dockerfile: Dockerfile
-=======
-    build: ./src
-    ports:
-      - "81:80"
->>>>>>> aa1993e (docker-compose.yml aldatuta)
     volumes:
       - ./src:/var/www/html
     environment:
@@ -25,15 +19,9 @@ services:
       MYSQL_PASSWORD: test
       MYSQL_DATABASE: database
     ports:
-<<<<<<< HEAD
       - "8891:3306"
     volumes:
       - db_data:/var/lib/mysql
-=======
-      - "8889:3306"
-    volumes:
-      - ./mysql:/var/lib/mysql
->>>>>>> aa1993e (docker-compose.yml aldatuta)
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
@@ -44,7 +32,6 @@ services:
     environment:
       PMA_HOST: db
       MYSQL_ROOT_PASSWORD: root
-<<<<<<< HEAD
 
   nginx:
     image: nginx:latest
@@ -57,5 +44,3 @@ services:
 
 volumes:
   db_data:
-=======
->>>>>>> aa1993e (docker-compose.yml aldatuta)
