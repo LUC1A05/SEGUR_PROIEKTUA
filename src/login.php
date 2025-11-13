@@ -10,6 +10,10 @@ error_reporting(E_ALL);
 session_start();
 header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';");
 
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
 if (isset($_COOKIE[session_name()])) {
     setcookie(
         session_name(),
@@ -38,13 +42,13 @@ $options = [
 
 // Aldagaiak erroreak kudeatzeko
 $error_message = '';
-if (!isset($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
-    die("CSRF token invalid or missing.");
-}
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
+    if (!isset($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+        die("CSRF token invalid or missing.");
+    }
     $erabiltzaileIzena = htmlspecialchars(trim($_POST['erabiltzaile_izena'] ?? ''));
     $pasahitza = $_POST['pasahitza'] ?? '';
     
