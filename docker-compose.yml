@@ -5,6 +5,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./src:/var/www/html
+      - ./config:/config
     environment:
       - ALLOW_OVERRIDE=true
     depends_on:

@@ -1,4 +1,7 @@
 FROM php:7.2.2-apache
+COPY config/apache-security.conf /etc/apache2/conf-enabled/security.conf
+
+RUN a2enmod headers
 
 RUN docker-php-ext-install mysqli pdo pdo_mysql
 
