@@ -1,20 +1,36 @@
-# SEGUR_PROIEKTUA
+# 4. entrega: Web Sistemari erasoa
 
-## Partaideak:
-- Maider Tato
-- Olatz Elejalde
-- Mikel Eguia
-- Asier las Hayas
-- Lucia del Rio
-- Ainhoa Tomas
+Dokumentu honetan egindako web sistemaren erasoari buruzko analisia dokumentatuko dugu.
 
-## Nola hedatu:
-1. Proiektua klonatu
-   git clone git@github.com:LUC1A05/SEGUR_PROIEKTUA.git
-   cd SEGUR_PROIEKTUA
-2. Docker irudia sortu
-   docker build -t SEGUR_PROIEKTUA:latest .
-3. Kontainerraren exekuzioa
-   docker run -d -p 3000:3000 --name segur_proiektua_container SEGUR_PROIEKTUA:latest
-4. Kontainerrak martxan daudela egiaztatu
-   docker ps
+---
+
+## “Biktima” proiektuaren URL-a
+
+* **Github-eko URL:** `https://github.com/aneemoreeno1/ISSKSproiektua.git`
+* **Erasotako branch-a:** `entrega_1`
+* **Erasotako taldea:** `Lankideak`
+
+---
+
+## Erasoari buruzko azalpena
+Batez ere erabilitako ahultasuna azalduz.
+
+### Aurkitutako ahultasuna
+
+|  |  |
+| :--- | :--- |
+| **Ahultasuna** | **[EJ: Inyección SQL (SQLi) / Cross-Site Scripting Persistente (XSS) / File Inclusion (LFI)]** |
+| **Non ematen da** | `[EJ: El formulario de login / El campo de comentarios / El parámetro 'id' en la URL]` |
+| **Zergatik ematen da** | Ausencia de **[EJ: sentencias preparadas / sanitización de entrada HTML / validación de rutas de archivo]**. La entrada del usuario se procesa directamente sin un control de seguridad adecuado. |
+| **Zer lortu dugu erasoarekin** | Se logró **[EJ: extraer la contraseña del administrador / ejecutar código JavaScript en la sesión de otro usuario / leer el archivo /etc/passwd del servidor]**. |
+
+---
+
+## Erasoa berregiteko azalpena
+
+### Erabilitako tresnak
+
+
+### Prosezua
+
+1.  **:** 
