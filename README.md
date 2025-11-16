@@ -19,10 +19,11 @@ Batez ere erabilitako ahultasuna azalduz.
 
 |  |  |
 | :--- | :--- |
-| **Ahultasuna** | **[EJ: Inyección SQL (SQLi) / Cross-Site Scripting Persistente (XSS) / File Inclusion (LFI)]** |
-| **Non ematen da** | `[EJ: El formulario de login / El campo de comentarios / El parámetro 'id' en la URL]` |
-| **Zergatik ematen da** | Ausencia de **[EJ: sentencias preparadas / sanitización de entrada HTML / validación de rutas de archivo]**. La entrada del usuario se procesa directamente sin un control de seguridad adecuado. |
-| **Zer lortu dugu erasoarekin** | Se logró **[EJ: extraer la contraseña del administrador / ejecutar código JavaScript en la sesión de otro usuario / leer el archivo /etc/passwd del servidor]**. |
+| **Ahultasuna** | **SQL injekzioa** |
+| **Arriskua** | Altua |
+| **Non ematen da** | `GET: http://localhost:81/show_user?user=5-2` |
+| **Informazioa** | `Web orrialdeko balio originalak erreplikatu dira [5-2] espresioa parametro baliotzat erabiliz.`|
+| **Zergatik ematen da** |  |
 
 ---
 
